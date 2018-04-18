@@ -92,6 +92,29 @@ app.put('/acronyms/:id', function (req, res) {
   });
 });
 
+// PUT to update a definition in an existing acronym
+app.put('/acronyms/:id/definitions/:defId', function (req, res) {
+  acronymsModel.updateAcronym({
+    _id: ObjectId.createFromHexString(req.params.id),
+    'definitions.id': ObjectId.createFromHexString(req.params.defId)
+  },
+  {
+    $push: {
+      definitions: req.body
+    }
+  },
+  db,
+  (err, result) => {
+    if (err) {
+      return console.log(err);
+    }
+
+    res.send(result);
+  });
+});
+
+// TODO: Add routes for adding and removing likes from existing acronyms
+
 // GET all categories
 app.get('/categories', function (req, res) {
   categoriesModel.findCategories({}, db, (err, result) => {
