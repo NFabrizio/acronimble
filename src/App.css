@@ -21,18 +21,17 @@
 
 .acronym-list {
   padding: 10px;
-  width: 80%;
+  width: 90%;
   display: flex;
-}
-
-.card-header {
-  height: 50px;
-  padding: 8px 0;
-  background-color: #bbb;
 }
 
 .acronym-card {
   flex: 1;
+  position: relative;
+}
+
+.MuiBadge-badge-63 {
+  top: 5px;
 }
 
 @keyframes App-logo-spin {
