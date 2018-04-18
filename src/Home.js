@@ -1,4 +1,5 @@
 import React, { Component } from 'react';
+import { Link } from 'react-router-dom';
 import logo from './logo.svg';
 import './App.css';
 import axios from 'axios';
@@ -7,7 +8,10 @@ const showExample = (userProfile, logout) => {
   return (
     <div>
       {userProfile && <img src={userProfile.picture} style={{height: '50px', width: '50px' }} />}
-      <button onClick={logout}>Bye</button>
+      <div>
+        <Link to="/profile">View Profile</Link>
+      </div>
+      <button onClick={logout}>Logout</button>
     </div>
   );
 };
