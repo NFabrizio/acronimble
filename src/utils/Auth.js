@@ -7,13 +7,14 @@ export default class Auth {
     this.logout = this.logout.bind(this);
     this.isAuthenticated = this.isAuthenticated.bind(this);
     this.handleAuthentication = this.handleAuthentication.bind(this);
+    this.getAccessToken = this.getAccessToken.bind(this);
   }
 
   auth0 = new auth0.WebAuth({
     domain: 'nathankluth.auth0.com',
     clientID: 'KhCmaEsCN2HdW3NkKo1uF6mK8EpMGImd',
     redirectUri: 'http://localhost:3000/callback',
-    audience: 'https://nathankluth.auth0.com/userinfo',
+    audience: 'acronimbleapi',
     responseType: 'token id_token',
     scope: 'openid'
   });
@@ -41,6 +42,10 @@ export default class Auth {
     localStorage.setItem('expires_at', expiresAt);
     // navigate to the home route
     history.replace('/');
+  }
+
+  getAccessToken() {
+    return localStorage.getItem('access_token');
   }
 
   logout() {

@@ -1,12 +1,25 @@
 import React, { Component } from 'react';
 import logo from './logo.svg';
 import './App.css';
+import axios from 'axios';
 
 class Home extends Component {
   constructor(props) {
     super(props);
     this.login = this.login.bind(this);
     this.logout = this.logout.bind(this);
+  }
+
+  componentDidMount() {
+    axios.get('/protected', {
+      headers: {
+        'Authorization': `Bearer ${this.props.auth.getAccessToken()}`
+      }
+    }).then((res) => {
+      console.log(res);
+    }).catch((err) => {
+      console.log(err);
+    });
   }
 
   login() {
@@ -23,7 +36,7 @@ class Home extends Component {
     return (
       <div className="App">
         <header className="App-header">
-          {isAuthenticated()? <button onClick={this.logout}>bye</button> : <button onClick={this.login}>hi</button>}
+          {isAuthenticated() ? <button onClick={this.logout}>bye</button> : <button onClick={this.login}>hi</button>}
           <img src={logo} className="App-logo" alt="logo" />
           <h1 className="App-title">Welcome to React</h1>
         </header>

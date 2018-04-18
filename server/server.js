@@ -5,12 +5,28 @@ const ObjectId = require('mongodb').ObjectID;
 const path = require('path');
 const acronymsModel = require('./models/acronyms');
 const categoriesModel = require('./models/categories');
+const jwt = require('express-jwt');
+const jwksRsa = require('jwks-rsa');
 
 const app = express();
 const port = process.env.PORT || 8080;
 const url = 'mongodb://localhost:27017';
 let db;
 const dbName = 'acronimble';
+
+const checkJwt = jwt({
+  secret: jwksRsa.expressJwtSecret({
+    cache: true,
+    rateLimit: true,
+    jwksRequestsPerMinute: 5,
+    jwksUri: `https://nathankluth.auth0.com/.well-known/jwks.json`
+  }),
+
+  // Validate the audience and the issuer.
+  audience: process.env.AUTH0_AUDIENCE,
+  issuer: `https://nathankluth.auth0.com/`,
+  algorithms: ['RS256']
+});
 
 MongoClient.connect(url, function(err, client) {
   if(err) {
@@ -24,6 +40,10 @@ MongoClient.connect(url, function(err, client) {
 
 app.use(bodyParser.json());
 app.use(express.static(path.join(__dirname, 'build')));
+app.use(bodyParser.json());
+app.use(bodyParser.urlencoded({
+  extended: true
+}));
 
 app.get('/ping', function (req, res) {
   return res.send('pong');
@@ -112,3 +132,8 @@ app.get('/', function (req, res) {
 app.listen(port, function() {
  console.log(`AcroNimble server running on port ${port}`);
 });
+
+app.get('/protected', checkJwt, function (req, res) {
+  console.log(req.user)
+  res.send('hi');
+})
