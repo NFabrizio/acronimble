@@ -92,11 +92,10 @@ app.put('/acronyms/:id', function (req, res) {
   });
 });
 
-// PUT to update a definition in an existing acronym
-app.put('/acronyms/:id/definitions/:defId', function (req, res) {
+// PUT to add a definition to an existing acronym
+app.put('/acronyms/:id/definitions', function (req, res) {
   acronymsModel.updateAcronym({
-    _id: ObjectId.createFromHexString(req.params.id),
-    'definitions.id': ObjectId.createFromHexString(req.params.defId)
+    _id: ObjectId.createFromHexString(req.params.id)
   },
   {
     $push: {
