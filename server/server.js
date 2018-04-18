@@ -4,6 +4,7 @@ const MongoClient = require('mongodb').MongoClient;
 const ObjectId = require('mongodb').ObjectID;
 const path = require('path');
 const acronymsModel = require('./models/acronyms');
+const categoriesModel = require('./models/categories');
 
 const app = express();
 const port = process.env.PORT || 8080;
@@ -28,6 +29,7 @@ app.get('/ping', function (req, res) {
   return res.send('pong');
 });
 
+// GET all acronyms
 app.get('/acronyms', function (req, res) {
   acronymsModel.findAcronyms({}, db, (err, result) => {
     if (err) {
@@ -38,6 +40,7 @@ app.get('/acronyms', function (req, res) {
   });
 });
 
+// POST a new acronym
 app.post('/acronyms', function (req, res) {
   // Give the definition a unique ID
   req.body.definitions[0].id = ObjectId.createFromTime(new Date().getTime());
@@ -51,8 +54,42 @@ app.post('/acronyms', function (req, res) {
   });
 });
 
+// PUT to an existing acronym
 app.put('/acronyms/:id', function (req, res) {
   acronymsModel.updateAcronym({_id: ObjectId.createFromHexString(req.params.id)}, {$set: req.body}, db, (err, result) => {
+    if (err) {
+      return console.log(err);
+    }
+
+    res.send(result);
+  });
+});
+
+// GET all categories
+app.get('/categories', function (req, res) {
+  categoriesModel.findCategories({}, db, (err, result) => {
+    if (err) {
+      return console.log(err);
+    }
+
+    res.send(result);
+  });
+});
+
+// POST a new category
+app.post('/categories', function (req, res) {
+  categoriesModel.insertCategory(req.body, db)
+  .then((result) => {
+    res.send(result);
+  })
+  .catch((err) => {
+    return console.log(err);
+  });
+});
+
+// PUT to an existing category
+app.put('/categories/:id', function (req, res) {
+  categoriesModel.updateCategory({_id: ObjectId.createFromHexString(req.params.id)}, {$set: req.body}, db, (err, result) => {
     if (err) {
       return console.log(err);
     }
