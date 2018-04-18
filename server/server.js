@@ -1,7 +1,7 @@
 const bodyParser = require('body-parser')
 const express = require('express');
 const MongoClient = require('mongodb').MongoClient;
-const ObjectIdParse = require('mongodb').ObjectID;
+const ObjectId = require('mongodb').ObjectID;
 const path = require('path');
 const acronymsModel = require('./models/acronyms');
 
@@ -49,7 +49,7 @@ app.post('/acronyms', function (req, res) {
 });
 
 app.put('/acronyms/:id', function (req, res) {
-  acronymsModel.updateAcronym({_id: ObjectIdParse.createFromHexString(req.params.id)}, {$set: req.body}, db, (err, result) => {
+  acronymsModel.updateAcronym({_id: ObjectId.createFromHexString(req.params.id)}, {$set: req.body}, db, (err, result) => {
     if (err) {
       return console.log(err);
     }
