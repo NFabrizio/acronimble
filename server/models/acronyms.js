@@ -3,18 +3,19 @@ const collectionName = 'acronyms';
 module.exports.findAcronyms = (query, db, callback) => {
   const collection = db.collection(collectionName);
 
-  collection.find(query)
+  return collection.find(query)
   .toArray(callback);
 };
 
 module.exports.insertAcronym = (doc, db, callback) => {
   const collection = db.collection(collectionName);
 
-  collection.insertOne(doc, callback);
+  return collection.insertOne(doc)
+  .then(callback);
 };
 
 module.exports.updateAcronym = (filter, updates, db, callback) => {
   const collection = db.collection(collectionName);
 
-  collection.updateOne(filter, updates, callback);
+  return collection.updateOne(filter, updates, callback);
 };

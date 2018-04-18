@@ -39,12 +39,15 @@ app.get('/acronyms', function (req, res) {
 });
 
 app.post('/acronyms', function (req, res) {
-  acronymsModel.insertAcronym(req.body, db, (err, result) => {
-    if (err) {
-      return console.log(err);
-    }
+  // Give the definition a unique ID
+  req.body.definitions[0].id = ObjectId.createFromTime(new Date().getTime());
 
+  acronymsModel.insertAcronym(req.body, db)
+  .then((result) => {
     res.send(result);
+  })
+  .catch((err) => {
+    return console.log(err);
   });
 });
 
