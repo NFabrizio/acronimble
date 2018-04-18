@@ -19,3 +19,12 @@ module.exports.updateAcronym = (filter, updates, db, callback) => {
 
   return collection.updateOne(filter, updates, callback);
 };
+
+module.exports.acronymExists = (query, db) => {
+  const collection = db.collection(collectionName);
+
+  return collection.findOne(query)
+  .then((result) => {
+    return result && Object.keys(result).length > 0 && result.constructor === Object;
+  });
+};
