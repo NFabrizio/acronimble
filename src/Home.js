@@ -3,6 +3,15 @@ import logo from './logo.svg';
 import './App.css';
 import axios from 'axios';
 
+const showExample = (userProfile, logout) => {
+  return (
+    <div>
+      {userProfile && <img src={userProfile.picture} style={{height: '50px', width: '50px' }} />}
+      <button onClick={logout}>Bye</button>
+    </div>
+  );
+};
+
 class Home extends Component {
   constructor(props) {
     super(props);
@@ -36,7 +45,7 @@ class Home extends Component {
     return (
       <div className="App">
         <header className="App-header">
-          {isAuthenticated() ? <button onClick={this.logout}>bye</button> : <button onClick={this.login}>hi</button>}
+          {isAuthenticated() ? showExample(this.props.auth.userProfile, this.logout) : <button onClick={this.login}>hi</button>}
           <img src={logo} className="App-logo" alt="logo" />
           <h1 className="App-title">Welcome to React</h1>
         </header>
