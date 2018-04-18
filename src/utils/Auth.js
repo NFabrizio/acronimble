@@ -8,6 +8,7 @@ export default class Auth {
     this.isAuthenticated = this.isAuthenticated.bind(this);
     this.handleAuthentication = this.handleAuthentication.bind(this);
     this.getAccessToken = this.getAccessToken.bind(this);
+    this.getProfile = this.getProfile.bind(this);
   }
 
   auth0 = new auth0.WebAuth({
@@ -16,20 +17,20 @@ export default class Auth {
     redirectUri: 'http://localhost:3000/callback',
     audience: 'acronimbleapi',
     responseType: 'token id_token',
-    scope: 'openid'
+    scope: 'openid profile'
   });
 
   login() {
     this.auth0.authorize();
   }
 
-  handleAuthentication() {
+  handleAuthentication(callback) {
     this.auth0.parseHash((err, authResult) => {
       if (authResult && authResult.accessToken && authResult.idToken) {
         this.setSession(authResult);
+        callback();
       } else if (err) {
-        // history.replace('/home');
-        console.log(err);
+        callback(err);
       }
     });
   }
@@ -62,5 +63,15 @@ export default class Auth {
     // Access Token's expiry time
     let expiresAt = JSON.parse(localStorage.getItem('expires_at'));
     return new Date().getTime() < expiresAt;
+  }
+
+  getProfile(cb) {
+    let accessToken = this.getAccessToken();
+    this.auth0.client.userInfo(accessToken, (err, profile) => {
+      if (profile) {
+        this.userProfile = profile;
+      }
+      cb(err, profile);
+    });
   }
 }
