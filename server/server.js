@@ -62,12 +62,19 @@ app.get('/acronyms', function (req, res) {
 
 // POST a new acronym
 app.post('/acronyms', function (req, res) {
-  // Give the definition a unique ID
-  req.body.definitions[0].id = ObjectId.createFromTime(new Date().getTime());
+  acronymsModel.acronymExists({ acronym: req.body.acronym }, db)
+  .then((exists) => {
+    if (exists) {
+      return res.status(409).send('Duplicate acronym');
+    }
 
-  acronymsModel.insertAcronym(req.body, db)
-  .then((result) => {
-    res.send(result);
+    // Give the definition a unique ID
+    req.body.definitions[0].id = ObjectId.createFromTime(new Date().getTime());
+
+    acronymsModel.insertAcronym(req.body, db)
+    .then((result) => {
+      res.send(result);
+    });
   })
   .catch((err) => {
     return console.log(err);
