@@ -52,7 +52,12 @@ const AcronymList = (props) => {
             </CardContent>
           </div>
         </Link>
-        <AcronymLike style={{position: 'absolute', top: 70, right: 14}} likes={item.definitions[0].likes && item.definitions[0].likes.length} />
+        <AcronymLike
+          style={{position: 'absolute', top: 70, right: 14}}
+          like={props.like}
+		  likes={item.definitions[0].likes && item.definitions[0].likes.length}
+          definitionId={item.definitions[0].id}
+        />
       </Card>
     );
   });

@@ -5,7 +5,6 @@ import logo from './logo.svg';
 import './App.css';
 import { MuiThemeProvider, createMuiTheme } from 'material-ui/styles';
 import AcronymList from './AcronymList';
-import AcronymPage from './AcronymPage';
 
 const theme = createMuiTheme();
 
@@ -36,7 +35,7 @@ class Home extends Component {
     return (
       <MuiThemeProvider theme={theme}>
         <div className="acronym-container">
-          <AcronymList list={this.state.acronyms} />
+          <AcronymList list={this.state.acronyms} like={this.props.like} />
         </div>
       </MuiThemeProvider>
     );

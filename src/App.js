@@ -5,6 +5,7 @@ import { Route, Router, Redirect } from 'react-router-dom';
 import Home from './Home';
 import Profile from './Profile';
 import Callback from './Callback';
+import axios from 'axios';
 import Auth from './utils/Auth';
 import history from './utils/history';
 import Login from './Login';
@@ -28,6 +29,7 @@ class App extends React.Component {
 
     this.handleAuthentication = this.handleAuthentication.bind(this);
     this.getProfile = this.getProfile.bind(this);
+    this.like = this.like.bind(this);
   }
 
   componentDidMount() {
@@ -66,6 +68,23 @@ class App extends React.Component {
         this.getProfile();
       });
     }
+  }
+
+  like(definitionId) {
+    axios.put(`/definitions/${definitionId}/likes`, {}, {
+      headers: {
+        'Authorization': `Bearer ${auth.getAccessToken()}`
+      }
+    }).then(() => {
+      const previousLikes = auth.userProfile.likes;
+      auth.userProfile.likes = previousLikes.concat([{
+        definitions: [{
+          _id: definitionId
+        }]
+      }]);
+
+      this.forceUpdate();
+    });
   }
 
   showExample() {
@@ -135,7 +154,7 @@ class App extends React.Component {
               {isAuthenticated() ? this.showExample() : <button onClick={this.login}>Login</button>}
             </div>
           </header>
-          <Route path="/" exact render={(props) => <Home auth={auth} {...props} />} />
+          <Route path="/" exact render={(props) => <Home auth={auth} like={this.like} {...props} />} />
           <Route
             path="/profile" render={(props) => {
               if (!auth.isAuthenticated()) {
@@ -160,7 +179,7 @@ class App extends React.Component {
             return <AddAcronym auth={auth} {...props} />;
           }} />
           <Route path="/acronyms/:id" render={(props) => {
-            return <AcronymPage auth={auth} {...props} />;
+            return <AcronymPage auth={auth} {...props} like={this.like} />;
           }} />
         </div>
       </Router>
