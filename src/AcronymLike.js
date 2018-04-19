@@ -15,27 +15,38 @@ const styles = {
   }
 };
 
-const AcronymLike = (props) => {
-  return (
-    <CardActions style={props.style}>
-      <Badge
-        badgeContent={props.likes}
-        color="secondary"
-        classes={{badge: props.classes.badge}}
-      >
-        <IconButton tooltip="Like">
-          <ThumbsUpIcon style={{fontSize: 28}} />
-        </IconButton>
-      </Badge>
-    </CardActions>
-  );
-};
+class AcronymLike extends React.Component {
+  constructor(props) {
+    super(props);
+    this.clickHandler = this.clickHandler.bind(this);
+    this.state = {
+      liked: this.props.liked
+    };
+  }
 
-AcronymLike.propTypes = {
-  children: PropTypes.node,
-  classes: PropTypes.object.isRequired,
-  clickHandler: PropTypes.func,
-  likes: PropTypes.number
-};
+  clickHandler() {
+    this.setState(prevState => ({
+      liked: !prevState.liked
+    }));
+
+    this.props.like(this.props.definitionId);
+  }
+
+  render() {
+    return (
+      <CardActions style={this.props.style}>
+        <Badge
+          badgeContent={this.props.likes}
+          color="secondary"
+          classes={{badge: this.props.classes.badge}}
+        >
+          <IconButton tooltip="Like" onClick={this.clickHandler}>
+            <ThumbsUpIcon style={{fontSize: 28}} />
+          </IconButton>
+        </Badge>
+      </CardActions>
+    );
+  }
+}
 
 export default withStyles(styles)(AcronymLike);
