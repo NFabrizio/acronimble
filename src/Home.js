@@ -11,6 +11,9 @@ const showExample = (userProfile, logout) => {
       <div>
         <Link to="/profile">View Profile</Link>
       </div>
+      <div>
+        <Link to="/new">New Acronym</Link>
+      </div>
       <button onClick={logout}>Logout</button>
     </div>
   );

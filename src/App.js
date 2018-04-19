@@ -92,6 +92,7 @@ import Callback from './Callback';
 import Auth from './utils/Auth';
 import history from './utils/history';
 import Login from './Login';
+import AddAcronym from './AddAcronym';
 
 const auth = new Auth();
 
@@ -140,7 +141,7 @@ class App extends React.Component {
           <Route
             path="/profile" render={(props) => {
               if (!auth.isAuthenticated()) {
-                return <Redirect to="/login" />
+                return <Redirect to="/login" />;
               }
 
               return (
@@ -153,6 +154,13 @@ class App extends React.Component {
             return <Callback {...props} />
           }}/>
           <Route path="/login" render={(props) => <Login auth={auth} {...props} />} />
+          <Route path="/new" render={(props) => {
+            if (!auth.isAuthenticated()) {
+              return <Redirect to="/login" />;
+            }
+
+            return <AddAcronym auth={auth} {...props} />;
+          }} />
         </div>
       </Router>
 >>>>>>> master
