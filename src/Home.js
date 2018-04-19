@@ -1,5 +1,7 @@
+import { AppBar } from 'material-ui';
 import React, { Component } from 'react';
 import { Link } from 'react-router-dom';
+import logo from './assets/pearson-logo.png';
 import './App.css';
 import axios from 'axios';
 import logo from './logo.svg';
@@ -10,7 +12,7 @@ import AcronymPage from './AcronymPage';
 
 const showExample = (userProfile, logout) => {
   return (
-    <div>
+    <div className="profile-block">
       {userProfile && <img src={userProfile.picture} style={{height: '50px', width: '50px' }} />}
       <div>
         <Link to="/profile">View Profile</Link>
@@ -108,7 +110,7 @@ class Home extends Component {
     return (
       <MuiThemeProvider>
         <div className="App">
-          <header className="App-header">
+          <AppBar className="App-header">
             {isAuthenticated() ? showExample(this.props.auth.userProfile, this.logout) : <button onClick={this.login}>hi</button>}
             <img src={logo} className="App-logo" alt="logo" />
             <h1
@@ -118,8 +120,8 @@ class Home extends Component {
             >
               acronymble
             </h1>
-            <span className="App-title" style={{fontSize: 14}}>it's fun</span>
-          </header>
+            <span className="App-title" style={{fontSize: 14}}>its fun</span>
+          </AppBar>
           <div className="acronym-container">
             {this.renderView()}
           </div>
