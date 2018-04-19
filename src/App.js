@@ -159,7 +159,9 @@ class App extends React.Component {
 
             return <AddAcronym auth={auth} {...props} />;
           }} />
-          <Route path="/acronyms/:id" component={AcronymPage} />
+          <Route path="/acronyms/:id" render={(props) => {
+            return <AcronymPage auth={auth} {...props} />;
+          }} />
         </div>
       </Router>
     );

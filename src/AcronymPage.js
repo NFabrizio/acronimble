@@ -80,7 +80,7 @@ class AcronymPage extends React.Component {
         <div style={{display: 'grid', gridTemplateColumns: '1fr 3fr'}}>
           <AcronymLike style={{gridArea: '1/1/auto/auto'}} likes={item.definitions[0].likes.length} />
           <CardContent style={{fontSize: 14, padding: '30px 24px 16px', gridArea: '1/2/auto/auto', textAlign: 'right'}}>
-            Submitted by tory
+            Submitted by {this.props.auth && this.props.auth.userProfile && this.props.auth.userProfile.nickname}
           </CardContent>
         </div>
       </Card>
@@ -89,6 +89,7 @@ class AcronymPage extends React.Component {
 }
 
 AcronymPage.propTypes = {
+  auth: PropTypes.object,
   children: PropTypes.node,
   classes: PropTypes.object.isRequired,
   item: PropTypes.object
