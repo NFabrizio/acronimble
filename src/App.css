@@ -1,7 +1,7 @@
 
 .App-logo {
   animation: App-logo-spin infinite 20s linear;
-  height: 80px;
+  width: 80px;
 }
 
 .App-header {
@@ -11,7 +11,13 @@
   color: white;
 }
 
+.app-info {
+  width: 25%;
+  float: left;
+}
+
 .App-title {
+  margin-top: 5px;
   font-size: 1.5em;
 }
 
@@ -49,6 +55,7 @@
 }
 
 .profile-block {
+  /* width: 25%; */
   float: right;
 }
 
