@@ -35,8 +35,8 @@ class AcronymPage extends React.Component {
     super(props);
 
     this.state = {
-      loading: true,
-      acronym: {}
+      acronym: {},
+      loading: true
     }
   }
 
@@ -51,6 +51,7 @@ class AcronymPage extends React.Component {
 
   render() {
     const item = this.state.acronym;
+
     if (this.state.loading) {
       return 'loading...'
     }

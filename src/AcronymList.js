@@ -57,7 +57,7 @@ const AcronymList = (props) => {
             color="secondary"
             classes={{badge: props.classes.badge}}
           >
-            <IconButton tooltip="Like" >
+            <IconButton tooltip="Like" onClick={}>
               <ThumbsUpIcon style={{fontSize: 28}} />
             </IconButton>
           </Badge>
