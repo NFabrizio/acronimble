@@ -116,7 +116,7 @@ class AddAcronym extends React.Component {
             {this.state.categories.map((category) => (
               <MenuItem key={category._id} value={category._id}>
                 <Checkbox checked={this.state.selected.indexOf(category._id) > -1} />
-                <ListItemText primary={category.name} />
+                <ListItemText primary={category.categoryName} />
               </MenuItem>
             ))}
           </Select>
