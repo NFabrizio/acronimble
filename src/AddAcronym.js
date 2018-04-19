@@ -125,7 +125,7 @@ class AddAcronym extends React.Component {
           <Button
             variant="raised"
             color="secondary"
-            onClick={() => this.props.history.goBack()}
+            onClick={() => this.props.history.push('/')}
           >
             Cancel
           </Button>
