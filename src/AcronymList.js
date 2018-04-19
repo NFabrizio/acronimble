@@ -35,20 +35,22 @@ const AcronymList = (props) => {
       <Card className="acronym-card" key={item.title}>
         <div onClick={() => props.clickHandler(item.title)}>
           <CardHeader
-            title={<span style={{display: 'inline'}}>{item.title}</span>}
+            title={item.title}
             subheader={acronymCategories(item.category)}
-            style={{padding: 10, paddingLeft: 16, backgroundColor: '#bbb'}}
+            style={{padding: 12, backgroundColor: '#bbb'}}
             classes={{title: props.classes.title, subheader: props.classes.subheader}}
           >
           </CardHeader>
-          <CardContent style={{fontSize: 18, paddingBottom: 10}}>
-            {item.fullName}
-          </CardContent>
-          <CardContent style={{fontSize: 14, paddingTop: 0, paddingBottom: 24}}>
-            {item.description}
-          </CardContent>
+          <div style={{padding: '16px 24px'}}>
+            <CardContent style={{fontSize: 18, padding: '0 40px 10px 0'}}>
+              {item.fullName}
+            </CardContent>
+            <CardContent style={{fontSize: 14, padding: '0 40px 0 0'}}>
+              {item.description}
+            </CardContent>
+          </div>
         </div>
-        <CardActions style={{position: 'absolute', top: 70, right: 8}}>
+        <CardActions style={{position: 'absolute', top: 70, right: 14}}>
           <Badge
             badgeContent={10}
             color="secondary"

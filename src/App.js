@@ -36,28 +36,26 @@ class App extends Component {
       acronymTitle: ''
     }
 
-    this.toggleCard = this.toggleCard.bind(this);
+    this.showCard = this.showCard.bind(this);
   }
 
-  toggleCard(acronymTitle) {
-    if (acronymTitle === 'close') {
-      this.setState({
-        showAcronym: false,
-        acronymTitle: ''
-      });
-    }
+  showCard(acronymTitle) {
+    this.setState({
+      showAcronym: true,
+      acronymTitle
+    });
+  }
 
-    if (acronymTitle !== 'close') {
-      this.setState({
-        showAcronym: true,
-        acronymTitle
-      });
-    }
+  goHome() {
+   this.setState({
+      showAcronym: false,
+      acronymTitle: ''
+    });
   }
 
   renderView () {
     if (!this.state.showAcronym) {
-      return <AcronymList list={acronyms} clickHandler={this.toggleCard} />
+      return <AcronymList list={acronyms} clickHandler={this.showCard} />
     }
 
     const acronym = acronyms.find((item) => item.title === this.state.acronymTitle);
@@ -70,7 +68,13 @@ class App extends Component {
         <div className="App">
           <header className="App-header">
             <img src={logo} className="App-logo" alt="logo" />
-            <h1 className="App-title" style={{marginBottom: 0}}>acronymble</h1>
+            <h1
+              className="App-title"
+              style={{marginBottom: 0, cursor: 'pointer'}}
+              onClick={() => this.goHome()}
+            >
+              acronymble
+            </h1>
             <span className="App-title" style={{fontSize: 14}}>it's fun</span>
           </header>
           <div className="acronym-container">

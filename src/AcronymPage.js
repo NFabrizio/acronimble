@@ -34,16 +34,17 @@ const AcronymPage = (props) => {
   return (
     <Card className="acronym-card">
       <CardHeader
-        title={<span style={{display: 'inline'}}>{item.title}</span>}
-        style={{padding: 10, paddingLeft: 16, backgroundColor: '#b0c4de'}}
+        title={item.title}
+        subheader={<div style={{fontSize: 16, paddingTop: 6}}>Top Definition!</div>}
+        style={{padding: 10, paddingLeft: 16, paddingRight: 16, backgroundColor: '#b0c4de'}}
         classes={{title: props.classes.title, subheader: props.classes.subheader}}
       >
       </CardHeader>
-      <div style={{display: 'grid', gridTemplateColumns: '7fr 2fr'}}>
+      <div style={{display: 'grid', gridTemplateColumns: '6fr 2fr'}}>
         <CardContent style={{fontSize: 18, paddingBottom: 10, gridArea: '1/1/auto/auto'}}>
           {item.fullName}
         </CardContent>
-        <div style={{gridArea: '1/2/auto/auto', padding: 10}}>
+        <div style={{gridArea: '1/2/auto/auto', paddingTop: 16, paddingRight: 24}}>
           {acronymCategories(item.category)}
         </div>
       </div>
