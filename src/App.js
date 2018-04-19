@@ -7,6 +7,7 @@ import Auth from './utils/Auth';
 import history from './utils/history';
 import Login from './Login';
 import AddAcronym from './AddAcronym';
+import AcronymPage from './AcronymPage';
 
 const auth = new Auth();
 
@@ -51,7 +52,7 @@ class App extends React.Component {
     return (
       <Router history={history}>
         <div>
-          <Route path="/" render={(props) => <Home auth={auth} {...props} />} />
+          <Route path="/" exact render={(props) => <Home auth={auth} {...props} />} />
           <Route
             path="/profile" render={(props) => {
               if (!auth.isAuthenticated()) {
@@ -75,6 +76,7 @@ class App extends React.Component {
 
             return <AddAcronym auth={auth} {...props} />;
           }} />
+          <Route path="/acronyms/:id" component={AcronymPage} />
         </div>
       </Router>
     );
