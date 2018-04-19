@@ -64,11 +64,11 @@ app.get('/acronyms', function (req, res) {
 app.get('/acronyms/:id', function (req, res) {
   acronymsModel.findAcronyms({ _id: ObjectId.createFromHexString(req.params.id) }, db, (err, result) => {
     if (err) {
-      return res().status(500);
+      return res.status(500).send();
     }
 
     if (!result.length) {
-      return res.send({ message: 'Not found' }).status(404);
+      return res.status(404).send({ message: 'Not found' });
     }
 
     res.send(result[0]);
@@ -102,16 +102,16 @@ app.post('/acronyms', checkJwt, function (req, res) {
 app.put('/acronyms/:id', checkJwt, function (req, res) {
   acronymsModel.findAcronyms({}, db, (err, result) => {
     if (err) {
-      return res.send(err).status(500);
+      return res.status(500).send(err);
     }
 
     if (result.length && result[0].owner !== req.user.sub) {
-      return res.send({ message: 'Unauthorized' }).status(401);
+      return res.status(401).send({ message: 'Unauthorized' });
     }
 
     acronymsModel.updateAcronym({_id: ObjectId.createFromHexString(req.params.id)}, {$set: req.body}, db, (err, result) => {
       if (err) {
-        return res.send(err).status(500);
+        return res.status(500).send(err);
       }
 
       res.send(result);
@@ -120,8 +120,9 @@ app.put('/acronyms/:id', checkJwt, function (req, res) {
 });
 
 // PUT to add a definition to an existing acronym
-app.put('/acronyms/:id/definitions', function (req, res) {
+app.put('/acronyms/:id/definitions', checkJwt, function (req, res) {
   req.body.owner = req.user.sub;
+  req.body.id = ObjectId.createFromTime(new Date().getTime());
 
   acronymsModel.updateAcronym({
     _id: ObjectId.createFromHexString(req.params.id)
@@ -176,14 +177,27 @@ app.put('/categories/:id', checkJwt, function (req, res) {
   });
 });
 
+// PUT to existing definition
+app.put('/definitions/:id', checkJwt, function (req, res) {
+  const objectId = ObjectId.createFromHexString(req.params.id);
+  req.body.id = objectId;
+  acronymsModel.definitionUpdate(objectId, req.body, db, (err) => {
+    if (err) {
+      return res.status(500).send(err);
+    }
+
+    res.status(204).send();
+  });
+});
+
 // PUT to existing definition -- like
 app.put('/definitions/:id/likes', checkJwt, function (req, res) {
   acronymsModel.likeDefinition(req.params.id, req.user.sub, db, (err) => {
     if (err) {
-      return res.send(err).status(500);
+      return res.status(500).send(err);
     }
 
-    res.send().status(204);
+    res.status(204).send();
   });
 });
 
@@ -191,10 +205,10 @@ app.put('/definitions/:id/likes', checkJwt, function (req, res) {
 app.delete('/definitions/:id/likes', checkJwt, function (req, res) {
   acronymsModel.unlikeDefinition(req.params.id, req.user.sub, db, (err) => {
     if (err) {
-      return res.send(err).status(500);
+      return res.status(500).send(err);
     }
 
-    res.send().status(204);
+    res.status(204).send();
   });
 });
 
@@ -205,7 +219,7 @@ app.get('/users/:id/acronyms', checkJwt, function (req, res) {
     $or: [{ 'definitions.likes': req.params.id }, { owner: req.params.id }]
   }, db, (err, result) => {
     if (err) {
-      return res.send().status(500);
+      return res.status(500).send();
     }
 
     res.send(result);
