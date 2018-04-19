@@ -29,6 +29,22 @@ module.exports.acronymExists = (query, db) => {
   });
 };
 
+module.exports.definitionUpdate = (definitionId, doc, db, callback) => {
+  const collection = db.collection(collectionName);
+  // const userCollection = db.collection('users');
+
+  return collection.updateOne({ 'definitions.id': definitionId }, {
+    $set: { 'definitions.$': doc }
+  }, (err) => {
+    if (err) {
+      return callback(err);
+    }
+    callback(null);
+
+    // userCollection.update({ userId }, { $addToSet: { likes: definitionId } }, { upsert: true }, callback);
+  });
+}
+
 module.exports.likeDefinition = (definitionId, userId, db, callback) => {
   const collection = db.collection(collectionName);
   const userCollection = db.collection('users');
