@@ -85,6 +85,7 @@ app.post('/acronyms', checkJwt, function (req, res) {
 
     // Give the definition a unique ID
     req.body.definitions[0].id = ObjectId.createFromTime(new Date().getTime());
+    req.body.definitions[0].owner = req.user.sub;
     req.body.owner = req.user.sub;
 
     acronymsModel.insertAcronym(req.body, db)
@@ -120,6 +121,8 @@ app.put('/acronyms/:id', checkJwt, function (req, res) {
 
 // PUT to add a definition to an existing acronym
 app.put('/acronyms/:id/definitions', function (req, res) {
+  req.body.owner = req.user.sub;
+
   acronymsModel.updateAcronym({
     _id: ObjectId.createFromHexString(req.params.id)
   },
