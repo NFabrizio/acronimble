@@ -24,7 +24,7 @@ const styles = {
 const acronymCategories = (list) => {
   return list.map((item) => {
     return (
-      <Chip label={item} style={{marginLeft: 10}} />
+      <Chip label={item} style={{marginLeft: 10}} key={item}/>
     );
   });
 };
@@ -32,8 +32,8 @@ const acronymCategories = (list) => {
 const AcronymList = (props) => {
   return props.list.map((item) => {
     return (
-      <div className="acronym-list">
-        <Card className="acronym-card">
+      <Card className="acronym-card" key={item.title}>
+        <div onClick={() => props.clickHandler(item.title)}>
           <CardHeader
             title={<span style={{display: 'inline'}}>{item.title}</span>}
             subheader={acronymCategories(item.category)}
@@ -47,19 +47,19 @@ const AcronymList = (props) => {
           <CardContent style={{fontSize: 14, paddingTop: 0, paddingBottom: 24}}>
             {item.description}
           </CardContent>
-          <CardActions style={{position: 'absolute', top: 70, right: 8}}>
-            <Badge
-              badgeContent={10}
-              color="secondary"
-              classes={{badge: props.classes.badge}}
-            >
-              <IconButton tooltip="Like" >
-                <ThumbsUpIcon style={{fontSize: 28}} />
-              </IconButton>
-            </Badge>
-          </CardActions>
-        </Card>
-      </div>
+        </div>
+        <CardActions style={{position: 'absolute', top: 70, right: 8}}>
+          <Badge
+            badgeContent={10}
+            color="secondary"
+            classes={{badge: props.classes.badge}}
+          >
+            <IconButton tooltip="Like" >
+              <ThumbsUpIcon style={{fontSize: 28}} />
+            </IconButton>
+          </Badge>
+        </CardActions>
+      </Card>
     );
   });
 };
@@ -67,6 +67,7 @@ const AcronymList = (props) => {
 AcronymList.propTypes = {
   children: PropTypes.node,
   classes: PropTypes.object.isRequired,
+  clickHandler: PropTypes.func
 };
 
 export default withStyles(styles)(AcronymList);
