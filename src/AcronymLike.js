@@ -19,7 +19,7 @@ const AcronymLike = (props) => {
   return (
     <CardActions style={props.style}>
       <Badge
-        badgeContent={10}
+        badgeContent={props.likes}
         color="secondary"
         classes={{badge: props.classes.badge}}
       >
@@ -34,7 +34,8 @@ const AcronymLike = (props) => {
 AcronymLike.propTypes = {
   children: PropTypes.node,
   classes: PropTypes.object.isRequired,
-  clickHandler: PropTypes.func
+  clickHandler: PropTypes.func,
+  likes: PropTypes.number
 };
 
 export default withStyles(styles)(AcronymLike);

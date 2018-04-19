@@ -78,7 +78,7 @@ class AcronymPage extends React.Component {
           {item.definitions && item.definitions[0].description}
         </CardContent>
         <div style={{display: 'grid', gridTemplateColumns: '1fr 3fr'}}>
-          <AcronymLike style={{gridArea: '1/1/auto/auto'}} />
+          <AcronymLike style={{gridArea: '1/1/auto/auto'}} likes={item.definitions[0].likes.length} />
           <CardContent style={{fontSize: 14, padding: '30px 24px 16px', gridArea: '1/2/auto/auto', textAlign: 'right'}}>
             Submitted by tory
           </CardContent>
