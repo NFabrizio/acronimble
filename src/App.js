@@ -47,7 +47,7 @@ class App extends React.Component {
   };
 
   getProfile() {
-    auth.getProfile((err, profile) => {
+    auth.getProfile((err) => {
       if (err) {
         return;
       }
