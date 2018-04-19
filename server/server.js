@@ -60,8 +60,23 @@ app.get('/acronyms', function (req, res) {
   });
 });
 
+// GET acronym by ID
+app.get('/acronyms/:id', function (req, res) {
+  acronymsModel.findAcronyms({ _id: ObjectId.createFromHexString(req.params.id) }, db, (err, result) => {
+    if (err) {
+      return res().status(500);
+    }
+
+    if (!result.length) {
+      return res.send({ message: 'Not found' }).status(404);
+    }
+
+    res.send(result[0]);
+  });
+});
+
 // POST a new acronym
-app.post('/acronyms', function (req, res) {
+app.post('/acronyms', checkJwt, function (req, res) {
   acronymsModel.acronymExists({ acronym: req.body.acronym }, db)
   .then((exists) => {
     if (exists) {
@@ -70,6 +85,7 @@ app.post('/acronyms', function (req, res) {
 
     // Give the definition a unique ID
     req.body.definitions[0].id = ObjectId.createFromTime(new Date().getTime());
+    req.body.owner = req.user.sub;
 
     acronymsModel.insertAcronym(req.body, db)
     .then((result) => {
@@ -82,13 +98,23 @@ app.post('/acronyms', function (req, res) {
 });
 
 // PUT to an existing acronym
-app.put('/acronyms/:id', function (req, res) {
-  acronymsModel.updateAcronym({_id: ObjectId.createFromHexString(req.params.id)}, {$set: req.body}, db, (err, result) => {
+app.put('/acronyms/:id', checkJwt, function (req, res) {
+  acronymsModel.findAcronyms({}, db, (err, result) => {
     if (err) {
-      return console.log(err);
+      return res.send(err).status(500);
     }
 
-    res.send(result);
+    if (result.length && result[0].owner !== req.user.sub) {
+      return res.send({ message: 'Unauthorized' }).status(401);
+    }
+
+    acronymsModel.updateAcronym({_id: ObjectId.createFromHexString(req.params.id)}, {$set: req.body}, db, (err, result) => {
+      if (err) {
+        return res.send(err).status(500);
+      }
+
+      res.send(result);
+    });
   });
 });
 
@@ -126,7 +152,7 @@ app.get('/categories', function (req, res) {
 });
 
 // POST a new category
-app.post('/categories', function (req, res) {
+app.post('/categories', checkJwt, function (req, res) {
   categoriesModel.insertCategory(req.body, db)
   .then((result) => {
     res.send(result);
@@ -137,10 +163,46 @@ app.post('/categories', function (req, res) {
 });
 
 // PUT to an existing category
-app.put('/categories/:id', function (req, res) {
+app.put('/categories/:id', checkJwt, function (req, res) {
   categoriesModel.updateCategory({_id: ObjectId.createFromHexString(req.params.id)}, {$set: req.body}, db, (err, result) => {
     if (err) {
       return console.log(err);
+    }
+
+    res.send(result);
+  });
+});
+
+// PUT to existing definition -- like
+app.put('/definitions/:id/likes', checkJwt, function (req, res) {
+  acronymsModel.likeDefinition(req.params.id, req.user.sub, db, (err) => {
+    if (err) {
+      return res.send(err).status(500);
+    }
+
+    res.send().status(204);
+  });
+});
+
+// DELETE like
+app.delete('/definitions/:id/likes', checkJwt, function (req, res) {
+  acronymsModel.unlikeDefinition(req.params.id, req.user.sub, db, (err) => {
+    if (err) {
+      return res.send(err).status(500);
+    }
+
+    res.send().status(204);
+  });
+});
+
+
+// GET users likes/submissions
+app.get('/users/:id/acronyms', checkJwt, function (req, res) {
+  acronymsModel.findAcronyms({
+    $or: [{ 'definitions.likes': req.params.id }, { owner: req.params.id }]
+  }, db, (err, result) => {
+    if (err) {
+      return res.send().status(500);
     }
 
     res.send(result);
@@ -154,8 +216,3 @@ app.get('/', function (req, res) {
 app.listen(port, function() {
  console.log(`AcroNimble server running on port ${port}`);
 });
-
-app.get('/protected', checkJwt, function (req, res) {
-  console.log(req.user)
-  res.send('hi');
-})

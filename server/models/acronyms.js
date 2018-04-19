@@ -28,3 +28,33 @@ module.exports.acronymExists = (query, db) => {
     return result && Object.keys(result).length > 0 && result.constructor === Object;
   });
 };
+
+module.exports.likeDefinition = (definitionId, userId, db, callback) => {
+  const collection = db.collection(collectionName);
+  const userCollection = db.collection('users');
+
+  return collection.updateOne({ 'definitions.id': definitionId }, {
+    $addToSet: { 'definitions.$.likes': userId }
+  }, (err) => {
+    if (err) {
+      return callback(err);
+    }
+
+    userCollection.update({ userId }, { $addToSet: { likes: definitionId } }, { upsert: true }, callback);
+  });
+}
+
+module.exports.unlikeDefinition = (definitionId, userId, db, callback) => {
+  const collection = db.collection(collectionName);
+  const userCollection = db.collection('users');
+
+  return collection.updateOne({ 'definitions.id': definitionId }, {
+    $pull: { 'definitions.$.likes': userId }
+  }, (err) => {
+    if (err) {
+      return callback(err);
+    }
+
+    userCollection.update({ userId }, { $pull: { likes: definitionId } }, { upsert: true }, callback);
+  });
+}
