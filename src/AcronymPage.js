@@ -7,6 +7,7 @@ import IconButton from 'material-ui/IconButton';
 import ThumbsUpIcon from '@material-ui/icons/ThumbUp';
 import { withStyles } from 'material-ui/styles';
 import axios from 'axios';
+import AcronymLike from './AcronymLike';
 
 const styles = {
   badge: {
@@ -77,18 +78,8 @@ class AcronymPage extends React.Component {
           {item.definitions && item.definitions[0].description}
         </CardContent>
         <div style={{display: 'grid', gridTemplateColumns: '1fr 3fr'}}>
-          <CardActions style={{gridArea: '1/1/auto/auto'}} >
-            <Badge
-              badgeContent={10}
-              color="secondary"
-              classes={{badge: this.props.classes.badge}}
-            >
-              <IconButton tooltip="Like" >
-                <ThumbsUpIcon style={{fontSize: 28}} />
-              </IconButton>
-            </Badge>
-          </CardActions>
-          <CardContent style={{fontSize: 14, paddingBottom: 10, gridArea: '1/2/auto/auto', textAlign: 'right'}}>
+          <AcronymLike style={{gridArea: '1/1/auto/auto'}} />
+          <CardContent style={{fontSize: 14, padding: '30px 24px 16px', gridArea: '1/2/auto/auto', textAlign: 'right'}}>
             Submitted by tory
           </CardContent>
         </div>

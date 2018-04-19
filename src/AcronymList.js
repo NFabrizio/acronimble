@@ -7,6 +7,7 @@ import IconButton from 'material-ui/IconButton';
 import ThumbsUpIcon from '@material-ui/icons/ThumbUp';
 import { withStyles } from 'material-ui/styles';
 import { Link } from 'react-router-dom';
+import AcronymLike from './AcronymLike';
 
 const styles = {
   badge: {
@@ -51,17 +52,7 @@ const AcronymList = (props) => {
             </CardContent>
           </div>
         </Link>
-        <CardActions style={{position: 'absolute', top: 70, right: 14}}>
-          <Badge
-            badgeContent={10}
-            color="secondary"
-            classes={{badge: props.classes.badge}}
-          >
-            <IconButton tooltip="Like" onClick={}>
-              <ThumbsUpIcon style={{fontSize: 28}} />
-            </IconButton>
-          </Badge>
-        </CardActions>
+        <AcronymLike style={{position: 'absolute', top: 70, right: 14}} />
       </Card>
     );
   });
