@@ -79,7 +79,7 @@ class App extends React.Component {
       const previousLikes = auth.userProfile.likes;
       auth.userProfile.likes = previousLikes.concat([{
         definitions: [{
-          _id: definitionId
+          id: definitionId
         }]
       }]);
 

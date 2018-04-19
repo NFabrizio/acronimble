@@ -81,7 +81,8 @@ class AcronymPage extends React.Component {
             style={{gridArea: '1/1/auto/auto'}}
             like={this.props.like}
             definitionId={item.definitions[0].id}
-		    likes={item.definitions[0].likes ? item.definitions[0].likes.length : 0}
+            likes={item.definitions[0].likes || []}
+            auth={this.props.auth}
           />
           <CardContent style={{fontSize: 14, padding: '30px 24px 16px', gridArea: '1/2/auto/auto', textAlign: 'right'}}>
             Submitted by {this.props.auth && this.props.auth.userProfile && this.props.auth.userProfile.nickname}
