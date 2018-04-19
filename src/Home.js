@@ -27,7 +27,6 @@ class Home extends Component {
 
     this.login = this.login.bind(this);
     this.logout = this.logout.bind(this);
-    this.showCard = this.showCard.bind(this);
   }
 
   handleClick = event => {
@@ -37,13 +36,6 @@ class Home extends Component {
   handleClose = () => {
     this.setState({ anchorElement: null });
   };
-
-  showCard(acronymTitle) {
-    this.setState({
-      showAcronym: true,
-      acronymTitle
-    });
-  }
 
   componentDidMount() {
     axios.get('/acronyms').then((res) => {
