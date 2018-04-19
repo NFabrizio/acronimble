@@ -6,10 +6,11 @@ import './App.css';
 import axios from 'axios';
 import logo from './logo.svg';
 import './App.css';
-import MuiThemeProvider from 'material-ui/styles/MuiThemeProvider';
+import { MuiThemeProvider, createMuiTheme } from 'material-ui/styles';
 import AcronymList from './AcronymList';
 import AcronymPage from './AcronymPage';
 
+const theme = createMuiTheme();
 const showExample = (userProfile, logout) => {
   return (
     <div className="profile-block">
@@ -61,18 +62,6 @@ class Home extends Component {
     this.showCard = this.showCard.bind(this);
   }
 
-  componentDidMount() {
-    axios.get('/protected', {
-      headers: {
-        'Authorization': `Bearer ${this.props.auth.getAccessToken()}`
-      }
-    }).then((res) => {
-      console.log(res);
-    }).catch((err) => {
-      console.log(err);
-    });
-  }
-
   showCard(acronymTitle) {
     this.setState({
       showAcronym: true,
@@ -108,7 +97,7 @@ class Home extends Component {
     const { isAuthenticated } = this.props.auth;
 
     return (
-      <MuiThemeProvider>
+      <MuiThemeProvider theme={theme}>
         <div className="App">
           <AppBar className="App-header">
             {isAuthenticated() ? showExample(this.props.auth.userProfile, this.logout) : <button onClick={this.login}>hi</button>}
