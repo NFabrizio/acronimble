@@ -24,63 +24,23 @@ const showExample = (userProfile, logout) => {
   );
 };
 
-const acronyms = [
-  {
-    title: 'PI',
-    fullName: 'Personal Information',
-    description: "User's personal information!",
-    category: ['technology', 'security'],
-    added: {
-      by: 'Joe Blow',
-      date: 'January 14, 2017'
-    }
-  },
-  {
-    title: 'GLP',
-    fullName: 'Global Learning Platform',
-    description: "The future of Pearson!",
-    category: ['technology', 'leadership'],
-    added: {
-      by: 'Chuck E Cheese',
-      date: 'October 28, 2016'
-    }}
-];
-
 class Home extends Component {
   constructor(props) {
     super(props);
 
     this.state = {
-      showAcronym: false,
-      acronymTitle: ''
+      acronyms: [],
+      loading: true
     }
 
     this.login = this.login.bind(this);
     this.logout = this.logout.bind(this);
-    this.showCard = this.showCard.bind(this);
   }
 
-  showCard(acronymTitle) {
-    this.setState({
-      showAcronym: true,
-      acronymTitle
+  componentDidMount() {
+    axios.get('/acronyms').then((res) => {
+      this.setState({acronyms: res.data, loading: false})
     });
-  }
-
-  goHome() {
-   this.setState({
-      showAcronym: false,
-      acronymTitle: ''
-    });
-  }
-
-  renderView () {
-    if (!this.state.showAcronym) {
-      return <AcronymList list={acronyms} clickHandler={this.showCard} />
-    }
-
-    const acronym = acronyms.find((item) => item.title === this.state.acronymTitle);
-    return <AcronymPage item={acronym} />
   }
 
   login() {
@@ -94,6 +54,10 @@ class Home extends Component {
   render() {
     const { isAuthenticated } = this.props.auth;
 
+    if (this.state.loading) {
+      return 'loading...';
+    }
+
     return (
       <MuiThemeProvider theme={theme}>
         <div className="App">
@@ -103,14 +67,13 @@ class Home extends Component {
             <h1
               className="App-title"
               style={{marginBottom: 0, cursor: 'pointer'}}
-              onClick={() => this.goHome()}
             >
               acronymble
             </h1>
             <span className="App-title" style={{fontSize: 14}}>it's fun</span>
           </header>
           <div className="acronym-container">
-            {this.renderView()}
+            <AcronymList list={this.state.acronyms} />
           </div>
         </div>
       </MuiThemeProvider>
