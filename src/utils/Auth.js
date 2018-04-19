@@ -1,5 +1,6 @@
 import auth0 from 'auth0-js';
 import history from './history';
+import axios from 'axios';
 
 export default class Auth {
   constructor() {
@@ -41,6 +42,7 @@ export default class Auth {
     localStorage.setItem('access_token', authResult.accessToken);
     localStorage.setItem('id_token', authResult.idToken);
     localStorage.setItem('expires_at', expiresAt);
+    localStorage.setItem('user_id', authResult.idTokenPayload.sub);
     // navigate to the home route
     history.replace('/');
   }
@@ -67,11 +69,30 @@ export default class Auth {
 
   getProfile(cb) {
     let accessToken = this.getAccessToken();
-    this.auth0.client.userInfo(accessToken, (err, profile) => {
-      if (profile) {
-        this.userProfile = profile;
-      }
-      cb(err, profile);
+    const auth0Promise = new Promise((resolve, reject) => {
+      this.auth0.client.userInfo(accessToken, (err, profile) => {
+        if (profile) {
+          return resolve(profile);
+        }
+
+        return reject(err);
+      });
     });
+
+    const userId = encodeURIComponent(localStorage.getItem('user_id'));
+    const userLikesPromise = axios.get(`/users/${userId}/acronyms`, {
+      headers: {
+        'Authorization': `Bearer ${accessToken}`
+      }
+    });
+
+    Promise.all([auth0Promise, userLikesPromise]).then(([profile, likes]) => {
+      this.userProfile = {
+        ...profile,
+        likes: likes.data || []
+      };
+
+      cb();
+    }).catch(cb);
   }
 }

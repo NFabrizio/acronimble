@@ -71,7 +71,7 @@ class AddAcronym extends React.Component {
         Authorization: `Bearer ${this.props.auth.getAccessToken()}`
       }
     }).then((res) => {
-      this.props.history.push(`/acronyms/${res._id}`);
+      this.props.history.push('/');
     });
   }
 

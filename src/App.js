@@ -1,4 +1,6 @@
-import React from 'react';
+import Button from 'material-ui/Button';
+import { Link } from 'react-router-dom';
+import Menu, { MenuItem } from 'material-ui/Menu';import React from 'react';
 import { Route, Router, Redirect } from 'react-router-dom';
 import Home from './Home';
 import Profile from './Profile';
@@ -8,12 +10,22 @@ import history from './utils/history';
 import Login from './Login';
 import AddAcronym from './AddAcronym';
 import AcronymPage from './AcronymPage';
+import pearsonLogo from './assets/pearson-logo.png';
 
 const auth = new Auth();
 
 class App extends React.Component {
   constructor(props) {
     super(props);
+
+    this.state = {
+      acronyms: [],
+      acronymTitle: '',
+      anchorElement: null,
+      showAcronym: false,
+      loading: true
+    }
+
     this.handleAuthentication = this.handleAuthentication.bind(this);
     this.getProfile = this.getProfile.bind(this);
   }
@@ -26,8 +38,16 @@ class App extends React.Component {
    this.getProfile();
   }
 
+  handleClick = event => {
+    this.setState({ anchorElement: event.currentTarget });
+  };
+
+  handleClose = () => {
+    this.setState({ anchorElement: null });
+  };
+
   getProfile() {
-    auth.getProfile((err, profile) => {
+    auth.getProfile((err) => {
       if (err) {
         return;
       }
@@ -48,10 +68,73 @@ class App extends React.Component {
     }
   }
 
+  showExample() {
+    const { anchorElement } = this.state;
+    const userProfile = auth.userProfile;
+    return (
+      <div>
+        {userProfile && <img src={userProfile.picture} style={{height: '50px', width: '50px', display: 'block', margin: '0 auto' }} />}
+        <Button
+            aria-owns={anchorElement ? 'simple-menu' : null}
+            aria-haspopup="true"
+            onClick={this.handleClick}
+            style={{ display: 'block', textAlign: 'center' }}
+          >
+            <div style={{ width: '35px', height: '5px', backgroundColor: 'white', margin: '6px auto', borderRadius: '3px' }}></div>
+            <div style={{ width: '35px', height: '5px', backgroundColor: 'white', margin: '6px auto', borderRadius: '3px' }}></div>
+            <div style={{ width: '35px', height: '5px', backgroundColor: 'white', margin: '6px auto', borderRadius: '3px' }}></div>
+        </Button>
+        <Menu
+            id="simple-menu"
+            anchorEl={anchorElement}
+            open={Boolean(anchorElement)}
+            onClose={this.handleClose}
+          >
+          <MenuItem onClick={this.handleClose}>
+            <Link to="/profile" style={{ textDecoration: 'none', color: 'black' }}>View Profile</Link>
+          </MenuItem>
+          <MenuItem onClick={this.handleClose}>
+            <Link to="/new" style={{ textDecoration: 'none', color: 'black' }}>New Acronym</Link>
+          </MenuItem>
+          <MenuItem onClick={this.logout}>
+            Logout
+          </MenuItem>
+        </Menu>
+      </div>
+    );
+  };
+
+  login() {
+    auth.login();
+  }
+
+  logout() {
+    auth.logout();
+  }
+
   render() {
+    const { isAuthenticated } = auth;
+
     return (
       <Router history={history}>
-        <div>
+        <div className="App">
+          <header className="App-header">
+            <div className="app-info">
+              <img src={pearsonLogo} className="App-logo" alt="logo" />
+              <Link to="/" style={{ textDecoration: 'none', color: 'white' }}>
+                <h1
+                  className="App-title"
+                  style={{marginBottom: 0, cursor: 'pointer'}}
+                >
+                  acronymble
+                </h1>
+              </Link>
+              <span className="App-title" style={{fontSize: 14}}>its fun</span>
+            </div>
+            <div className="profile-block">
+              {isAuthenticated() ? this.showExample() : <button onClick={this.login}>Login</button>}
+            </div>
+          </header>
           <Route path="/" exact render={(props) => <Home auth={auth} {...props} />} />
           <Route
             path="/profile" render={(props) => {
