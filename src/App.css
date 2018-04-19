@@ -1,6 +1,3 @@
-.App {
-  text-align: center;
-}
 
 .App-logo {
   animation: App-logo-spin infinite 20s linear;
@@ -20,6 +17,22 @@
 
 .App-intro {
   font-size: large;
+}
+
+.acronym-container {
+  box-sizing: border-box;
+  padding: 10px;
+  width: 100%;
+}
+
+/*.acronym-list {
+  display: flex;
+  margin-bottom: 10px;
+}*/
+
+.acronym-card {
+  position: relative;
+  margin-bottom: 10px;
 }
 
 @keyframes App-logo-spin {
