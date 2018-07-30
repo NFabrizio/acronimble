@@ -145,13 +145,13 @@ class App extends React.Component {
                   className="App-title"
                   style={{marginBottom: 0, cursor: 'pointer'}}
                 >
-                  acronymble
+                  AcroNimble
                 </h1>
               </Link>
               <span className="App-title" style={{fontSize: 14}}>its fun</span>
             </div>
             <div className="profile-block">
-              {isAuthenticated() ? this.showExample() : <button onClick={this.login}>Login</button>}
+              {isAuthenticated() ? this.showExample() : <Button onClick={this.login} style={{ backgroundColor: 'white' }}>Login</Button>}
             </div>
           </header>
           <Route path="/" exact render={(props) => <Home auth={auth} like={this.like} {...props} />} />

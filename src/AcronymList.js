@@ -35,7 +35,7 @@ const AcronymList = (props) => {
   return props.list.map((item) => {
     return (
       <Card className="acronym-card" key={item.acronym}>
-        <Link to={`/acronyms/${item._id}`}>
+        <Link to={`/acronyms/${item._id}`} style={{ color: 'black', textDecoration: 'none' }}>
           <CardHeader
             title={item.acronym}
             subheader={acronymCategories(item.category)}
