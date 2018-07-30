@@ -55,7 +55,8 @@ const AcronymList = (props) => {
         <AcronymLike
           style={{position: 'absolute', top: 70, right: 14}}
           like={props.like}
-		  likes={item.definitions[0].likes && item.definitions[0].likes.length}
+          auth={props.auth}
+		      likes={item.definitions[0].likes || []}
           definitionId={item.definitions[0].id}
         />
       </Card>

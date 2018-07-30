@@ -35,7 +35,7 @@ class Home extends Component {
     return (
       <MuiThemeProvider theme={theme}>
         <div className="acronym-container">
-          <AcronymList list={this.state.acronyms} like={this.props.like} />
+          <AcronymList list={this.state.acronyms} like={this.props.like} auth={this.props.auth} />
         </div>
       </MuiThemeProvider>
     );

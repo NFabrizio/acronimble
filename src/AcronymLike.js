@@ -19,14 +19,41 @@ class AcronymLike extends React.Component {
   constructor(props) {
     super(props);
     this.clickHandler = this.clickHandler.bind(this);
+
+    const liked = this.isLiked(this.props);
+
     this.state = {
-      liked: this.props.liked
+      likes: this.props.likes,
+      liked
     };
   }
 
+  isLiked(props) {
+    if (!props.auth || !props.auth.userProfile) {
+      return false;
+    }
+
+    const { likes = [] } = props.auth.userProfile;
+    return likes.some((like) => {
+      return like.definitions[0].id === props.definitionId
+    });
+  }
+
+  componentWillReceiveProps(nextProps) {
+    const liked = this.isLiked(nextProps);
+    this.setState({
+      liked
+    });
+  }
+
   clickHandler() {
+    if (!this.props.auth || !this.props.auth.userProfile) {
+      return;
+    }
+
     this.setState(prevState => ({
-      liked: !prevState.liked
+      liked: true,
+      likes: prevState.likes.concat([this.props.auth.userProfile.sub])
     }));
 
     this.props.like(this.props.definitionId);
@@ -36,12 +63,12 @@ class AcronymLike extends React.Component {
     return (
       <CardActions style={this.props.style}>
         <Badge
-          badgeContent={this.props.likes || 0}
+          badgeContent={this.props.likes && this.props.like.length || 0}
           color="secondary"
           classes={{badge: this.props.classes.badge}}
         >
           <IconButton tooltip="Like" onClick={this.clickHandler}>
-            <ThumbsUpIcon style={{fontSize: 28}} />
+            <ThumbsUpIcon style={{fontSize: 28, color: this.state.liked ? 'blue' : 'black' }} />
           </IconButton>
         </Badge>
       </CardActions>
