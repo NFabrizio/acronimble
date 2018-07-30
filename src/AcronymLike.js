@@ -36,7 +36,7 @@ class AcronymLike extends React.Component {
     return (
       <CardActions style={this.props.style}>
         <Badge
-          badgeContent={this.props.likes}
+          badgeContent={this.props.likes || 0}
           color="secondary"
           classes={{badge: this.props.classes.badge}}
         >
