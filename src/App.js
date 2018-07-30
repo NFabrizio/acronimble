@@ -33,31 +33,12 @@ class App extends React.Component {
   }
 
   componentDidMount() {
-// console.log('this.props mounted');
-// console.log(this.props);
-// if (this.props.location && this.props.location.state) {
-//   console.log('this.props.location.state mounted');
-//   console.log(this.props.location.state);
-// }
     if (!auth.isAuthenticated()) {
       return;
     }
 
-    // if (this.props.location.state.loggedIn) {
-    //   this.setState({ anchorElement: null });
-    // }
-
    this.getProfile();
   }
-
-//   componentDidUpdate() {
-// console.log('this.props updated');
-// console.log(this.props);
-// if (this.props.location && this.props.location.state) {
-//   console.log('this.props.location.state updated');
-//   console.log(this.props.location.state);
-// }
-//   }
 
   handleClick = event => {
     this.setState({ anchorElement: event.currentTarget });
