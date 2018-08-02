@@ -127,9 +127,11 @@ class App extends React.Component {
     auth.login();
   }
 
-  logout() {
+  logout = () => {
+    // Reset state on anchorElement so that dropdown will close on logout
+    this.setState({ anchorElement: null });
     auth.logout();
-  }
+  };
 
   render() {
     const { isAuthenticated } = auth;
