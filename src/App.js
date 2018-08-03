@@ -55,7 +55,6 @@ class App extends React.Component {
   }
 
   handleAuthentication(nextState, replace) {
-    console.log(nextState);
     if (/access_token|id_token|error/.test(nextState.location.hash)) {
       auth.handleAuthentication((err) => {
         if (err) {
