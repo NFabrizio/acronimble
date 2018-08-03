@@ -39,15 +39,8 @@ class AcronymLike extends React.Component {
     });
   }
 
-  componentWillReceiveProps(nextProps) {
-    const liked = this.isLiked(nextProps);
-    this.setState({
-      liked
-    });
-  }
-
   clickHandler() {
-    if (!this.props.auth || !this.props.auth.userProfile) {
+    if (!this.props.auth || !this.props.auth.userProfile || this.state.liked) {
       return;
     }
 
@@ -63,7 +56,7 @@ class AcronymLike extends React.Component {
     return (
       <CardActions style={this.props.style}>
         <Badge
-          badgeContent={this.props.likes && this.props.like.length || 0}
+          badgeContent={this.state.likes && (this.state.likes.length || 0)}
           color="secondary"
           classes={{badge: this.props.classes.badge}}
         >

@@ -20,11 +20,7 @@ class App extends React.Component {
     super(props);
 
     this.state = {
-      acronyms: [],
-      acronymTitle: '',
-      anchorElement: null,
-      showAcronym: false,
-      loading: true
+      anchorElement: null
     }
 
     this.handleAuthentication = this.handleAuthentication.bind(this);
@@ -59,6 +55,7 @@ class App extends React.Component {
   }
 
   handleAuthentication(nextState, replace) {
+    console.log(nextState);
     if (/access_token|id_token|error/.test(nextState.location.hash)) {
       auth.handleAuthentication((err) => {
         if (err) {
