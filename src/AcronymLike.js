@@ -16,58 +16,33 @@ const styles = {
   }
 };
 
-class AcronymLike extends React.Component {
-  constructor(props) {
-    super(props);
-    this.clickHandler = this.clickHandler.bind(this);
-
-    // const liked = this.isLiked(this.props);
-
-    // this.state = {
-    //   likes: this.props.likes,
-    //   liked
-    // };
+const clickHandler = (isAuthenticated, liked, like, itemId, definitionId) => {
+  if (!isAuthenticated || liked) {
+    return;
   }
 
-  // isLiked(props) {
-  //   if (!props.auth || !props.auth.userProfile) {
-  //     return false;
-  //   }
+  like(itemId, definitionId);
+};
 
-  //   const { likes = [] } = props.auth.userProfile;
-  //   return likes.some((like) => {
-  //     return like.definitions[0].id === props.definitionId
-  //   });
-  // }
+const AcronymLike = (props) => {
+  const { like, likes, definitionId, itemId, liked, isAuthenticated } = props;
 
-  clickHandler() {
-    if (!this.props.isAuthenticated || this.props.liked) {
-      return;
-    }
-
-    // this.setState(prevState => ({
-    //   liked: true,
-    //   likes: prevState.likes.concat([this.props.auth.userProfile.sub])
-    // }));
-
-    this.props.like(this.props.itemId, this.props.definitionId);
-  }
-
-  render() {
-    return (
-      <CardActions style={this.props.style}>
-        <Badge
-          badgeContent={this.props.likes.length}
-          color="secondary"
-          classes={{ badge: this.props.classes.badge }}
+  return (
+    <CardActions style={props.style}>
+      <Badge
+        badgeContent={likes.length}
+        color="secondary"
+        classes={{ badge: props.classes.badge }}
+      >
+        <IconButton
+          tooltip="Like"
+          onClick={() => clickHandler(isAuthenticated, liked, like, itemId, definitionId)}
         >
-          <IconButton tooltip="Like" onClick={this.clickHandler}>
-            <ThumbsUpIcon style={{ fontSize: 28, color: this.props.liked ? 'blue' : 'black' }} />
-          </IconButton>
-        </Badge>
-      </CardActions>
-    );
-  }
-}
+          <ThumbsUpIcon style={{ fontSize: 28, color: props.liked ? 'blue' : 'black' }} />
+        </IconButton>
+      </Badge>
+    </CardActions>
+  );
+};
 
 export default withStyles(styles)(AcronymLike);
