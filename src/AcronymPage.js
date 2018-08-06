@@ -80,7 +80,6 @@ class AcronymPage extends React.Component {
   }
 
   render() {
-    console.log(this.props);
     const item = this.state.acronym;
     const { auth, likesIds } = this.props;
     if (this.state.loading) {
