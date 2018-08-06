@@ -181,7 +181,7 @@ class App extends React.Component {
             return <AddAcronym auth={auth} {...props} />;
           }} />
           <Route path="/acronyms/:id" render={(props) => {
-            return <AcronymPage auth={auth} {...props} like={this.like} />;
+            return <AcronymPage auth={auth} likesIds={this.state.likesIds} addToLikes={this.addToLikes} {...props} />;
           }} />
         </div>
       </Router>

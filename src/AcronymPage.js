@@ -38,7 +38,9 @@ class AcronymPage extends React.Component {
     this.state = {
       acronym: {},
       loading: true
-    }
+    };
+
+    this.like = this.like.bind(this);
   }
 
   componentDidMount() {
@@ -50,8 +52,37 @@ class AcronymPage extends React.Component {
     });
   }
 
+  isLiked(likesIds, definitionId) {
+    return likesIds.some((likeId) => {
+      return likeId === definitionId
+    });
+  }
+
+  like(itemId, definitionId) {
+    const { auth } = this.props;
+    axios.put(`/definitions/${definitionId}/likes`, {}, {
+      headers: {
+        'Authorization': `Bearer ${auth.getAccessToken()}`
+      }
+    }).then(() => {
+      const acronym = this.state.acronym;
+      const definition = acronym.definitions.find((definition) => {
+        return definition.id === definitionId;
+      });
+
+      (definition.likes = definition.likes || []).push(auth.userProfile.sub);
+
+      this.setState({
+        acronym
+      });
+      this.props.addToLikes(definitionId);
+    });
+  }
+
   render() {
+    console.log(this.props);
     const item = this.state.acronym;
+    const { auth, likesIds } = this.props;
     if (this.state.loading) {
       return 'loading...'
     }
@@ -79,13 +110,15 @@ class AcronymPage extends React.Component {
         <div style={{display: 'grid', gridTemplateColumns: '1fr 3fr'}}>
           <AcronymLike
             style={{gridArea: '1/1/auto/auto'}}
-            like={this.props.like}
-            definitionId={item.definitions[0].id}
+            like={this.like}
             likes={item.definitions[0].likes || []}
-            auth={this.props.auth}
+            definitionId={item.definitions[0].id}
+            itemId={item._id}
+            liked={this.isLiked(likesIds, item.definitions[0].id)}
+            isAuthenticated={auth.isAuthenticated()}
           />
           <CardContent style={{fontSize: 14, padding: '30px 24px 16px', gridArea: '1/2/auto/auto', textAlign: 'right'}}>
-            Submitted by {this.props.auth && this.props.auth.userProfile && this.props.auth.userProfile.nickname}
+            Submitted by {auth && auth.userProfile && auth.userProfile.nickname}
           </CardContent>
         </div>
       </Card>

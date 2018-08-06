@@ -31,9 +31,9 @@ const acronymCategories = (list = []) => {
   });
 };
 
-const isLiked = (likesIds, itemId) => {
+const isLiked = (likesIds, definitionId) => {
   return likesIds.some((likeId) => {
-    return likeId === itemId
+    return likeId === definitionId
   });
 };
 
