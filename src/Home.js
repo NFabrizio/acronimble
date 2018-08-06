@@ -37,22 +37,22 @@ class Home extends Component {
       }
     }).then(() => {
       const acronyms = this.state.acronyms;
-      const tory = acronyms.find((acronym) => {
+      const definition = acronyms.find((acronym) => {
         return acronym._id === itemId;
       }).definitions.find((definition) => {
         return definition.id === definitionId;
       });
-      console.log(tory, acronyms);
-      (tory.likes = tory.likes || []).push(auth.userProfile.sub);
-      console.log(tory, acronyms);
 
-      this.setState({acronyms});
+      (definition.likes = definition.likes || []).push(auth.userProfile.sub);
+
+      this.setState({
+        acronyms
+      });
       this.props.addToLikes(definitionId);
     });
   }
 
   render() {
-    console.log(this.state.acronyms);
     const { auth, likesIds } = this.props;
 
     if (this.state.loading) {

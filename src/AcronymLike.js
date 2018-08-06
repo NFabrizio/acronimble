@@ -42,7 +42,6 @@ class AcronymLike extends React.Component {
 
   clickHandler() {
     if (!this.props.isAuthenticated || this.props.liked) {
-    // if (!this.props.isAuthenticated) {
       return;
     }
 

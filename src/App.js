@@ -76,7 +76,7 @@ class App extends React.Component {
   }
 
   addToLikes(definitionId) {
-    let { likesIds } = this.state;
+    const { likesIds } = this.state;
     likesIds.push(definitionId);
 
     this.setState({
@@ -89,7 +89,7 @@ class App extends React.Component {
     const userProfile = auth.userProfile;
     return (
       <div>
-        {userProfile && <img src={userProfile.picture} style={{height: '50px', width: '50px', display: 'block', margin: '0 auto' }} />}
+        {userProfile && <img src={userProfile.picture} alt="Profile" style={{height: '50px', width: '50px', display: 'block', margin: '0 auto' }} />}
         <Button
             aria-owns={anchorElement ? 'simple-menu' : null}
             aria-haspopup="true"
@@ -133,7 +133,6 @@ class App extends React.Component {
 
   render() {
     const { isAuthenticated } = auth;
-    console.log(this.state.likesIds);
 
     return (
       <Router history={history}>
