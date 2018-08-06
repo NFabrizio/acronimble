@@ -5,7 +5,7 @@ import { Route, Router, Redirect } from 'react-router-dom';
 import Home from './Home';
 import Profile from './Profile';
 import Callback from './Callback';
-import axios from 'axios';
+// import axios from 'axios';
 import Auth from './utils/Auth';
 import history from './utils/history';
 import Login from './Login';
@@ -20,12 +20,14 @@ class App extends React.Component {
     super(props);
 
     this.state = {
-      anchorElement: null
+      anchorElement: null,
+      likesIds: []
     }
 
     this.handleAuthentication = this.handleAuthentication.bind(this);
     this.getProfile = this.getProfile.bind(this);
-    this.like = this.like.bind(this);
+    this.logout = this.logout.bind(this);
+    this.addToLikes = this.addToLikes.bind(this);
   }
 
   componentDidMount() {
@@ -50,7 +52,14 @@ class App extends React.Component {
         return;
       }
 
-      this.forceUpdate();
+      const { likes = [] } = auth.userProfile;
+      const likesIds = likes.map((item) => {
+        return item.definitions[0].id;
+      });
+
+      this.setState({
+        likesIds
+      });
     });
   }
 
@@ -66,20 +75,12 @@ class App extends React.Component {
     }
   }
 
-  like(definitionId) {
-    axios.put(`/definitions/${definitionId}/likes`, {}, {
-      headers: {
-        'Authorization': `Bearer ${auth.getAccessToken()}`
-      }
-    }).then(() => {
-      const previousLikes = auth.userProfile.likes;
-      auth.userProfile.likes = previousLikes.concat([{
-        definitions: [{
-          id: definitionId
-        }]
-      }]);
+  addToLikes(definitionId) {
+    let { likesIds } = this.state;
+    likesIds.push(definitionId);
 
-      this.forceUpdate();
+    this.setState({
+      likesIds
     });
   }
 
@@ -125,10 +126,14 @@ class App extends React.Component {
 
   logout() {
     auth.logout();
+    this.setState({
+      likesIds: []
+    });
   }
 
   render() {
     const { isAuthenticated } = auth;
+    console.log(this.state.likesIds);
 
     return (
       <Router history={history}>
@@ -150,10 +155,12 @@ class App extends React.Component {
               {isAuthenticated() ? this.showExample() : <Button onClick={this.login} style={{ backgroundColor: 'white' }}>Login</Button>}
             </div>
           </header>
-          <Route path="/" exact render={(props) => <Home auth={auth} like={this.like} {...props} />} />
+          <Route path="/" exact
+            render={(props) => <Home auth={auth} likesIds={this.state.likesIds} addToLikes={this.addToLikes} {...props} />}
+          />
           <Route
             path="/profile" render={(props) => {
-              if (!auth.isAuthenticated()) {
+              if (!isAuthenticated()) {
                 return <Redirect to="/login" />;
               }
 
@@ -168,7 +175,7 @@ class App extends React.Component {
           }}/>
           <Route path="/login" render={(props) => <Login auth={auth} {...props} />} />
           <Route path="/new" render={(props) => {
-            if (!auth.isAuthenticated()) {
+            if (!isAuthenticated()) {
               return <Redirect to="/login" />;
             }
 
