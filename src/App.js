@@ -5,7 +5,6 @@ import { Route, Router, Redirect } from 'react-router-dom';
 import Home from './Home';
 import Profile from './Profile';
 import Callback from './Callback';
-// import axios from 'axios';
 import Auth from './utils/Auth';
 import history from './utils/history';
 import Login from './Login';

@@ -1,7 +1,6 @@
 import React, { Component } from 'react';
 import './App.css';
 import axios from 'axios';
-// import logo from './logo.svg';
 import './App.css';
 import { MuiThemeProvider, createMuiTheme } from 'material-ui/styles';
 import AcronymList from './AcronymList';

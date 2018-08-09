@@ -1,13 +1,9 @@
 import React from 'react';
-// import PropTypes from 'prop-types';
 import { CardActions } from 'material-ui/Card';
-// import Card, { CardActions, CardHeader, CardContent } from 'material-ui/Card';
-// import Chip from 'material-ui/Chip';
 import Badge from 'material-ui/Badge';
 import IconButton from 'material-ui/IconButton';
 import ThumbsUpIcon from '@material-ui/icons/ThumbUp';
 import { withStyles } from 'material-ui/styles';
-// import { Link } from 'react-router-dom';
 
 const styles = {
   badge: {
