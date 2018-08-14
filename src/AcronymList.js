@@ -8,6 +8,7 @@ import ThumbsUpIcon from '@material-ui/icons/ThumbUp';
 import { withStyles } from 'material-ui/styles';
 import { Link } from 'react-router-dom';
 import AcronymLike from './AcronymLike';
+import NoResultsPage from './NoResultsPage';
 
 const styles = {
   badge: {
@@ -32,6 +33,12 @@ const acronymCategories = (list = []) => {
 };
 
 const AcronymList = (props) => {
+  if (props.list && !props.list.length) {
+    return (
+      <NoResultsPage />
+    );
+  }
+
   return props.list.map((item) => {
     return (
       <Card className="acronym-card" key={item.acronym}>
