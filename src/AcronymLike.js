@@ -1,12 +1,9 @@
 import React from 'react';
-import PropTypes from 'prop-types';
-import Card, { CardActions, CardHeader, CardContent } from 'material-ui/Card';
-import Chip from 'material-ui/Chip';
+import { CardActions } from 'material-ui/Card';
 import Badge from 'material-ui/Badge';
 import IconButton from 'material-ui/IconButton';
 import ThumbsUpIcon from '@material-ui/icons/ThumbUp';
 import { withStyles } from 'material-ui/styles';
-import { Link } from 'react-router-dom';
 
 const styles = {
   badge: {
@@ -15,65 +12,33 @@ const styles = {
   }
 };
 
-class AcronymLike extends React.Component {
-  constructor(props) {
-    super(props);
-    this.clickHandler = this.clickHandler.bind(this);
-
-    const liked = this.isLiked(this.props);
-
-    this.state = {
-      likes: this.props.likes,
-      liked
-    };
+const clickHandler = (isAuthenticated, liked, like, itemId, definitionId) => {
+  if (!isAuthenticated || liked) {
+    return;
   }
 
-  isLiked(props) {
-    if (!props.auth || !props.auth.userProfile) {
-      return false;
-    }
+  like(itemId, definitionId);
+};
 
-    const { likes = [] } = props.auth.userProfile;
-    return likes.some((like) => {
-      return like.definitions[0].id === props.definitionId
-    });
-  }
+const AcronymLike = (props) => {
+  const { like, likes, definitionId, itemId, liked, isAuthenticated } = props;
 
-  componentWillReceiveProps(nextProps) {
-    const liked = this.isLiked(nextProps);
-    this.setState({
-      liked
-    });
-  }
-
-  clickHandler() {
-    if (!this.props.auth || !this.props.auth.userProfile) {
-      return;
-    }
-
-    this.setState(prevState => ({
-      liked: true,
-      likes: prevState.likes.concat([this.props.auth.userProfile.sub])
-    }));
-
-    this.props.like(this.props.definitionId);
-  }
-
-  render() {
-    return (
-      <CardActions style={this.props.style}>
-        <Badge
-          badgeContent={this.props.likes && this.props.like.length || 0}
-          color="secondary"
-          classes={{badge: this.props.classes.badge}}
+  return (
+    <CardActions style={props.style}>
+      <Badge
+        badgeContent={likes.length}
+        color="secondary"
+        classes={{ badge: props.classes.badge }}
+      >
+        <IconButton
+          tooltip="Like"
+          onClick={() => clickHandler(isAuthenticated, liked, like, itemId, definitionId)}
         >
-          <IconButton tooltip="Like" onClick={this.clickHandler}>
-            <ThumbsUpIcon style={{fontSize: 28, color: this.state.liked ? 'blue' : 'black' }} />
-          </IconButton>
-        </Badge>
-      </CardActions>
-    );
-  }
-}
+          <ThumbsUpIcon style={{ fontSize: 28, color: props.liked ? 'blue' : 'black' }} />
+        </IconButton>
+      </Badge>
+    </CardActions>
+  );
+};
 
 export default withStyles(styles)(AcronymLike);

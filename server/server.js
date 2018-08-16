@@ -192,7 +192,7 @@ app.put('/definitions/:id', checkJwt, function (req, res) {
 
 // PUT to existing definition -- like
 app.put('/definitions/:id/likes', checkJwt, function (req, res) {
-  acronymsModel.likeDefinition(req.params.id, req.user.sub, db, (err) => {
+  acronymsModel.likeDefinition(ObjectId.createFromHexString(req.params.id), req.user.sub, db, (err) => {
     if (err) {
       return res.status(500).send(err);
     }
