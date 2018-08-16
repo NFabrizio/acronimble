@@ -123,11 +123,13 @@ class App extends React.Component {
     auth.login();
   }
 
-  logout() {
-    auth.logout();
+  logout = () => {
+    // Reset state on anchorElement so that dropdown will close on logout
     this.setState({
+      anchorElement: null,
       likesIds: []
     });
+    auth.logout();
   }
 
   render() {
