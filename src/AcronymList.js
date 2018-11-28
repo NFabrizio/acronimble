@@ -5,6 +5,7 @@ import Chip from 'material-ui/Chip';
 import { withStyles } from 'material-ui/styles';
 import { Link } from 'react-router-dom';
 import AcronymLike from './AcronymLike';
+import NoResultsPage from './NoResultsPage';
 
 const styles = {
   badge: {
@@ -35,7 +36,19 @@ const isLiked = (likesIds, definitionId) => {
 };
 
 const AcronymList = (props) => {
-  const { list, like, isAuthenticated, likesIds } = props;
+  const {
+    list = [],
+    like,
+    isAuthenticated,
+    likesIds
+  } = props;
+
+  if ((Array.isArray(list) && !list.length) || !list.map) {
+    return (
+      <NoResultsPage />
+    );
+  }
+
   return list.map((item) => {
     return (
       <Card className="acronym-card" key={item.acronym}>
