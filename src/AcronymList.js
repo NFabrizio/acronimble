@@ -43,7 +43,7 @@ const AcronymList = (props) => {
     likesIds
   } = props;
 
-  if (!list.length || !list.map) {
+  if ((Array.isArray(list) && !list.length) || !list.map) {
     return (
       <NoResultsPage />
     );
