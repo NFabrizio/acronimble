@@ -1,10 +1,3 @@
-// import {
-//   compose,
-//   findIndex,
-//   propEq,
-//   map,
-//   update
-// } from 'ramda';
 import * as R from 'ramda';
 
 /**

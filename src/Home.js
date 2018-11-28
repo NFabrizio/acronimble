@@ -1,10 +1,3 @@
-// import {
-//   append,
-//   compose,
-//   lensProp,
-//   set,
-//   view
-// } from 'ramda';
 import * as R from 'ramda';
 import axios from 'axios';
 import { MuiThemeProvider, createMuiTheme } from 'material-ui/styles';
@@ -54,7 +47,7 @@ class Home extends Component {
         R.lensProp('likes')
       );
       const likesView = R.view(likesLens, acronyms);
-      const newAcronyms = R.set(likesLens, R.append(userId, likesView))(acronyms);
+      const newAcronyms = R.set(likesLens, R.append(userId, likesView), acronyms);
 
       this.setState({
         newAcronyms
