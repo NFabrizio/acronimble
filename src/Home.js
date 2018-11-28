@@ -1,9 +1,11 @@
-import React, { Component } from 'react';
-import './App.css';
+import * as R from 'ramda';
 import axios from 'axios';
-import './App.css';
 import { MuiThemeProvider, createMuiTheme } from 'material-ui/styles';
+import React, { Component } from 'react';
 import AcronymList from './AcronymList';
+import './App.css';
+import './App.css';
+import { lensBy_Id, lensById } from './utils/ramda';
 
 const theme = createMuiTheme();
 
@@ -36,17 +38,21 @@ class Home extends Component {
       }
     }).then(() => {
       const acronyms = this.state.acronyms;
-      const definition = acronyms.find((acronym) => {
-        return acronym._id === itemId;
-      }).definitions.find((definition) => {
-        return definition.id === definitionId;
-      });
+      const userId = auth && auth.userProfile && auth.userProfile.sub;
 
-      (definition.likes = definition.likes || []).push(auth.userProfile.sub);
+      const likesLens = R.compose(
+        lensBy_Id(itemId),
+        R.lensProp('definitions'),
+        lensById(definitionId),
+        R.lensProp('likes')
+      );
+      const likesView = R.view(likesLens, acronyms);
+      const newAcronyms = R.set(likesLens, R.append(userId, likesView), acronyms);
 
       this.setState({
-        acronyms
+        newAcronyms
       });
+
       this.props.addToLikes(definitionId);
     });
   }
