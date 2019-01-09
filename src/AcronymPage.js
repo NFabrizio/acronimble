@@ -1,8 +1,10 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import Card, { CardHeader, CardContent } from 'material-ui/Card';
-import Chip from 'material-ui/Chip';
-import { withStyles } from 'material-ui/styles';
+import Card from '@material-ui/core/Card';
+import CardContent from '@material-ui/core/CardContent';
+import CardHeader from '@material-ui/core/CardHeader';
+import Chip from '@material-ui/core/Chip';
+import { withStyles } from '@material-ui/styles';
 import axios from 'axios';
 import AcronymLike from './AcronymLike';
 

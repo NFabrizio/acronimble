@@ -1,6 +1,9 @@
 import React from 'react';
-import Card, { CardActions, CardHeader, CardContent } from 'material-ui/Card';
-import { withStyles } from 'material-ui/styles';
+import Card from '@material-ui/core/Card';
+import CardActions from '@material-ui/core/CardActions';
+import CardContent from '@material-ui/core/CardContent';
+import CardHeader from '@material-ui/core/CardHeader';
+import { withStyles } from '@material-ui/styles';
 
 const styles = {
   badge: {
