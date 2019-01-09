@@ -6,8 +6,16 @@ import AcronymList from './AcronymList';
 import './App.css';
 import './App.css';
 import { lensBy_Id, lensById } from './utils/ramda';
+import { TextField, InputAdornment } from 'material-ui';
+import SearchIcon from '@material-ui/icons/Search';
+import { withStyles } from 'material-ui';
 
 const theme = createMuiTheme();
+const styles = theme => ({
+  margin: {
+    margin: theme.spacing.unit,
+  }
+});
 
 class Home extends Component {
   constructor(props) {
@@ -18,7 +26,8 @@ class Home extends Component {
       acronymTitle: '',
       anchorElement: null,
       showAcronym: false,
-      loading: true
+      loading: true,
+      search: ''
     };
 
     this.like = this.like.bind(this);
@@ -64,14 +73,35 @@ class Home extends Component {
       return 'loading...';
     }
 
+
+    const match = R.compose(R.contains(this.state.search), R.prop('acronym'));
+    const acronymsList = R.filter(match, this.state.acronyms);
     return (
       <MuiThemeProvider theme={theme}>
         <div className="acronym-container">
-          <AcronymList list={this.state.acronyms} like={this.like} isAuthenticated={auth.isAuthenticated()} likesIds={likesIds} />
+          <div style={{ textAlign: 'right' }}>
+            <TextField
+              id="acronym-search"
+              variant="outlined"
+              type="search"
+              label="Search acronyms"
+              value={this.state.search}
+              className={this.props.classes.margin}
+              onChange={(event) => this.setState({ search: event.target.value })}
+              InputProps={{
+                endAdornment: (
+                  <InputAdornment position="end">
+                    <SearchIcon />
+                  </InputAdornment>
+                ),
+              }}
+            />
+          </div>
+          <AcronymList list={acronymsList} like={this.like} isAuthenticated={auth.isAuthenticated()} likesIds={likesIds} />
         </div>
       </MuiThemeProvider>
     );
   }
 }
 
-export default Home;
+export default withStyles(styles)(Home);
