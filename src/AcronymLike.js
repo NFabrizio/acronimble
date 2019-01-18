@@ -1,9 +1,9 @@
 import React from 'react';
-import { CardActions } from 'material-ui/Card';
-import Badge from 'material-ui/Badge';
-import IconButton from 'material-ui/IconButton';
+import CardActions from '@material-ui/core/CardActions';
+import Badge from '@material-ui/core/Badge';
+import IconButton from '@material-ui/core/IconButton';
 import ThumbsUpIcon from '@material-ui/icons/ThumbUp';
-import { withStyles } from 'material-ui/styles';
+import { withStyles } from '@material-ui/styles';
 
 const styles = {
   badge: {

@@ -1,6 +1,8 @@
-import Button from 'material-ui/Button';
+import Button from '@material-ui/core/Button';
 import { Link } from 'react-router-dom';
-import Menu, { MenuItem } from 'material-ui/Menu';import React from 'react';
+import Menu from '@material-ui/core/Menu';
+import MenuItem from '@material-ui/core/MenuItem';
+import React from 'react';
 import { Route, Router, Redirect } from 'react-router-dom';
 import Home from './Home';
 import Profile from './Profile';

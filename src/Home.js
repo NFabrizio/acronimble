@@ -1,6 +1,6 @@
 import * as R from 'ramda';
 import axios from 'axios';
-import { MuiThemeProvider, createMuiTheme } from 'material-ui/styles';
+import { MuiThemeProvider, createMuiTheme } from '@material-ui/core/styles';
 import React, { Component } from 'react';
 import AcronymList from './AcronymList';
 import './App.css';
