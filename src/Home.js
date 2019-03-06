@@ -73,9 +73,20 @@ class Home extends Component {
       return 'loading...';
     }
 
+    const definitionMatch = R.compose(
+      R.any(R.contains(this.state.search)),
+      R.map(R.compose(R.toLower, R.prop('description'))),
+      R.prop('definitions')
+    );
 
-    const match = R.compose(R.contains(this.state.search), R.prop('acronym'));
-    const acronymsList = R.filter(match, this.state.acronyms);
+    const titleMatch = R.compose(
+      R.contains(R.toLower(this.state.search)),
+      R.toLower,
+      R.prop('acronym')
+    );
+
+    const acronymsList = R.filter(R.anyPass([titleMatch, definitionMatch]), this.state.acronyms);
+
     return (
       <MuiThemeProvider theme={theme}>
         <div className="acronym-container">
