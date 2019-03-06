@@ -6,11 +6,15 @@ import AcronymList from './AcronymList';
 import './App.css';
 import './App.css';
 import { lensBy_Id, lensById } from './utils/ramda';
-import { TextField, InputAdornment } from 'material-ui';
+import { TextField, InputAdornment, withStyles } from '@material-ui/core';
 import SearchIcon from '@material-ui/icons/Search';
-import { withStyles } from 'material-ui';
 
-const theme = createMuiTheme();
+const theme = createMuiTheme({
+  typography: {
+    useNextVariants: true,
+  }
+});
+
 const styles = theme => ({
   margin: {
     margin: theme.spacing.unit,
@@ -75,17 +79,20 @@ class Home extends Component {
 
     const definitionMatch = R.compose(
       R.any(R.contains(this.state.search)),
-      R.map(R.compose(R.toLower, R.prop('description'))),
+      R.chain(R.compose(
+        R.map(R.toLower),
+        R.props(['description', 'name'])
+      )),
       R.prop('definitions')
     );
 
-    const titleMatch = R.compose(
+    const titleMatchOrNameMatch = R.compose(
       R.contains(R.toLower(this.state.search)),
-      R.toLower,
+      R.map(R.toLower),
       R.prop('acronym')
     );
 
-    const acronymsList = R.filter(R.anyPass([titleMatch, definitionMatch]), this.state.acronyms);
+    const acronymsList = R.filter(R.anyPass([titleMatchOrNameMatch, definitionMatch]), this.state.acronyms);
 
     return (
       <MuiThemeProvider theme={theme}>
