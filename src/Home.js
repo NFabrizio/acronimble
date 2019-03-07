@@ -86,13 +86,13 @@ class Home extends Component {
       R.prop('definitions')
     );
 
-    const titleMatchOrNameMatch = R.compose(
+    const titleMatch = R.compose(
       R.contains(R.toLower(this.state.search)),
       R.map(R.toLower),
       R.prop('acronym')
     );
 
-    const acronymsList = R.filter(R.anyPass([titleMatchOrNameMatch, definitionMatch]), this.state.acronyms);
+    const acronymsList = R.filter(R.anyPass([titleMatch, definitionMatch]), this.state.acronyms);
 
     return (
       <MuiThemeProvider theme={theme}>
