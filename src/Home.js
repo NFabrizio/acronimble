@@ -78,7 +78,7 @@ class Home extends Component {
     }
 
     const definitionMatch = R.compose(
-      R.any(R.contains(this.state.search)),
+      R.any(R.contains(this.state.search)), // any item in array contains search substring
       R.chain(R.compose(
         R.map(R.toLower),
         R.props(['description', 'name'])
