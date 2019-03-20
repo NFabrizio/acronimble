@@ -15,7 +15,7 @@ export default class Auth {
   auth0 = new auth0.WebAuth({
     domain: 'nathankluth.auth0.com',
     clientID: 'KhCmaEsCN2HdW3NkKo1uF6mK8EpMGImd',
-    redirectUri: 'http://localhost:3000/callback',
+    redirectUri: `${window.location.origin}/callback`,
     audience: 'acronimbleapi',
     responseType: 'token id_token',
     scope: 'openid profile'
