@@ -39,7 +39,7 @@ MongoClient.connect(url, function(err, client) {
 });
 
 app.use(bodyParser.json());
-app.use(express.static(path.join(__dirname, 'build')));
+app.use(express.static(path.join(__dirname, '../build')));
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({
   extended: true
