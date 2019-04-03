@@ -16,13 +16,15 @@ class UserAcronyms extends React.Component {
   }
 
   fetchUserAcronyms = () => {
-    this.setState({ loading: true });
+    this.setState({ loading: true, error: false });
 
     axios.get(`users/${this.props.auth.userProfile.sub}/acronyms`).then((res) => {
       this.setState({
         data: res.data,
         loading: false
       })
+    }).catch(() => {
+      this.setState({ error: true, loading: false })
     });
   }
 
