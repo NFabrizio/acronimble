@@ -77,11 +77,10 @@ class App extends React.Component {
   }
 
   addToLikes(definitionId) {
-    const { likesIds } = this.state;
-    likesIds.push(definitionId);
+    const { likesIds = [] } = this.state;
 
     this.setState({
-      likesIds
+      likesIds: [...likesIds, definitionId]
     });
   }
 

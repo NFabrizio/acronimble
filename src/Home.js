@@ -59,7 +59,7 @@ class Home extends Component {
       const newAcronyms = R.set(likesLens, R.append(userId, likesView), acronyms);
 
       this.setState({
-        newAcronyms
+        acronyms: newAcronyms
       });
 
       this.props.addToLikes(definitionId);
