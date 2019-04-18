@@ -45,7 +45,6 @@ class Home extends Component {
     const { itemId, definitionId } = this.props.match.params;
 
     if (itemId && definitionId) {
-      const { itemId, definitionId } = this.props.match.params;
       this.like(itemId, definitionId);
     }
   }
