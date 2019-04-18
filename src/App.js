@@ -1,17 +1,14 @@
-import Button from '@material-ui/core/Button';
-import { Link } from 'react-router-dom';
-import Menu from '@material-ui/core/Menu';
-import MenuItem from '@material-ui/core/MenuItem';
 import React from 'react';
-import { Route, Router, Redirect } from 'react-router-dom';
+import { Route, Router, Redirect, Link } from 'react-router-dom';
+import { Button, Menu, MenuItem } from '@material-ui/core';
 import Home from './Home';
 import Profile from './Profile';
 import Callback from './Callback';
-import Auth from './utils/Auth';
-import history from './utils/history';
 import Login from './Login';
 import AddAcronym from './AddAcronym';
 import AcronymPage from './AcronymPage';
+import Auth from './utils/Auth';
+import history from './utils/history';
 import pearsonLogo from './assets/pearson-logo.png';
 
 const auth = new Auth();

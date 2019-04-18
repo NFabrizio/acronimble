@@ -4,7 +4,6 @@ import { MuiThemeProvider, createMuiTheme } from '@material-ui/core/styles';
 import React, { Component } from 'react';
 import AcronymList from './AcronymList';
 import './App.css';
-import './App.css';
 import { lensBy_Id, lensById } from './utils/ramda';
 import { TextField, InputAdornment, withStyles } from '@material-ui/core';
 import SearchIcon from '@material-ui/icons/Search';
