@@ -43,7 +43,9 @@ class Home extends Component {
       this.setState({acronyms: res.data, loading: false});
     });
 
-    if (this.props.match.params.itemId) {
+    const { itemId, definitionId } = this.props.match.params;
+
+    if (itemId && definitionId) {
       const { itemId, definitionId } = this.props.match.params;
       this.like(itemId, definitionId);
     }
