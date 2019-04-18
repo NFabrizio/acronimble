@@ -8,6 +8,7 @@ import './App.css';
 import { lensBy_Id, lensById } from './utils/ramda';
 import { TextField, InputAdornment, withStyles } from '@material-ui/core';
 import SearchIcon from '@material-ui/icons/Search';
+import history from './utils/history';
 
 const theme = createMuiTheme({
   typography: {
@@ -39,12 +40,18 @@ class Home extends Component {
 
   componentDidMount() {
     axios.get('/acronyms').then((res) => {
-      this.setState({acronyms: res.data, loading: false})
+      this.setState({acronyms: res.data, loading: false});
     });
+
+    if (this.props.match.params.itemId) {
+      const { itemId, definitionId } = this.props.match.params;
+      this.like(itemId, definitionId);
+    }
   }
 
   like(itemId, definitionId) {
     const { auth } = this.props;
+
     axios.put(`/definitions/${definitionId}/likes`, {}, {
       headers: {
         'Authorization': `Bearer ${auth.getAccessToken()}`
@@ -62,11 +69,15 @@ class Home extends Component {
       const likesView = R.view(likesLens, acronyms);
       const newAcronyms = R.set(likesLens, R.append(userId, likesView), acronyms);
 
-      this.setState({
-        newAcronyms
-      });
-
       this.props.addToLikes(definitionId);
+
+      if (this.props.match.params.itemId) {
+        return history.replace('/');
+      }
+
+      this.setState({
+        acronyms: newAcronyms
+      });
     });
   }
 

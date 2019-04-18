@@ -66,7 +66,7 @@ class App extends React.Component {
 
   handleAuthentication(nextState, replace) {
     if (/access_token|id_token|error/.test(nextState.location.hash)) {
-      auth.handleAuthentication((err) => {
+      auth.handleAuthentication(nextState.location.search, (err) => {
         if (err) {
           return;
         }
@@ -121,10 +121,6 @@ class App extends React.Component {
     );
   };
 
-  login() {
-    auth.login();
-  }
-
   logout = () => {
     // Reset state on anchorElement so that dropdown will close on logout
     this.setState({
@@ -151,13 +147,16 @@ class App extends React.Component {
                   AcroNimble
                 </h1>
               </Link>
-              <span className="App-title" style={{fontSize: 14}}>its fun</span>
+              <span className="App-title" style={{fontSize: 14}}>it's fun</span>
             </div>
             <div className="profile-block">
-              {isAuthenticated() ? this.showExample() : <Button onClick={this.login} style={{ backgroundColor: 'white' }}>Login</Button>}
+              {isAuthenticated() ? this.showExample() : <Button onClick={auth.login} style={{ backgroundColor: 'white' }}>Login</Button>}
             </div>
           </header>
           <Route path="/" exact
+            render={(props) => <Home auth={auth} likesIds={this.state.likesIds} addToLikes={this.addToLikes} {...props} />}
+          />
+          <Route path="/like/:itemId/:definitionId"
             render={(props) => <Home auth={auth} likesIds={this.state.likesIds} addToLikes={this.addToLikes} {...props} />}
           />
           <Route
@@ -175,7 +174,7 @@ class App extends React.Component {
             this.handleAuthentication(props);
             return <Callback {...props} />
           }}/>
-          <Route path="/login" render={(props) => <Login auth={auth} {...props} />} />
+          <Route path="/login/:itemId/:definitionId" render={(props) => <Login auth={auth} {...props} />} />
           <Route path="/new" render={(props) => {
             if (!isAuthenticated()) {
               return <Redirect to="/login" />;

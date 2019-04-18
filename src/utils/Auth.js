@@ -5,6 +5,7 @@ import axios from 'axios';
 export default class Auth {
   constructor() {
     this.login = this.login.bind(this);
+    this.loginAndLike = this.loginAndLike.bind(this);
     this.logout = this.logout.bind(this);
     this.isAuthenticated = this.isAuthenticated.bind(this);
     this.handleAuthentication = this.handleAuthentication.bind(this);
@@ -25,10 +26,17 @@ export default class Auth {
     this.auth0.authorize();
   }
 
-  handleAuthentication(callback) {
+  loginAndLike(itemId, definitionId) {
+    const params = (itemId && definitionId) ? `?itemId=${itemId}&definitionId=${definitionId}` : '';
+    this.auth0.authorize({
+      redirectUri: `${window.location.origin}/callback${params}`,
+    });
+  }
+
+  handleAuthentication(search, callback) {
     this.auth0.parseHash((err, authResult) => {
       if (authResult && authResult.accessToken && authResult.idToken) {
-        this.setSession(authResult);
+        this.setSession(search, authResult);
         callback();
       } else if (err) {
         callback(err);
@@ -36,7 +44,7 @@ export default class Auth {
     });
   }
 
-  setSession(authResult) {
+  setSession(search, authResult) {
     // Set the time that the Access Token will expire at
     let expiresAt = JSON.stringify((authResult.expiresIn * 1000) + new Date().getTime());
     localStorage.setItem('access_token', authResult.accessToken);
@@ -44,6 +52,15 @@ export default class Auth {
     localStorage.setItem('expires_at', expiresAt);
     localStorage.setItem('user_id', authResult.idTokenPayload.sub);
     // navigate to the home route
+
+    if (search) {
+      const itemIdIndex = search.indexOf('&');
+      const defIdIndex = itemIdIndex + 14;
+      const params = `${search.slice(8, itemIdIndex)}/${search.slice(defIdIndex)}`;
+
+      return history.replace(`/like/${params}`);
+    }
+
     history.replace('/');
   }
 
