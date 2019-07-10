@@ -1,4 +1,5 @@
 import Button from '@material-ui/core/Button';
+import CssBaseline from '@material-ui/core/CssBaseline';
 import { Link } from 'react-router-dom';
 import Menu from '@material-ui/core/Menu';
 import MenuItem from '@material-ui/core/MenuItem';
@@ -89,35 +90,38 @@ class App extends React.Component {
     const { anchorElement } = this.state;
     const userProfile = auth.userProfile;
     return (
-      <div>
-        {userProfile && <img src={userProfile.picture} alt="Profile" style={{height: '50px', width: '50px', display: 'block', margin: '0 auto' }} />}
-        <Button
-            aria-owns={anchorElement ? 'simple-menu' : null}
-            aria-haspopup="true"
-            onClick={this.handleClick}
-            style={{ display: 'block', textAlign: 'center' }}
-          >
-            <div style={{ width: '35px', height: '5px', backgroundColor: 'white', margin: '6px auto', borderRadius: '3px' }}></div>
-            <div style={{ width: '35px', height: '5px', backgroundColor: 'white', margin: '6px auto', borderRadius: '3px' }}></div>
-            <div style={{ width: '35px', height: '5px', backgroundColor: 'white', margin: '6px auto', borderRadius: '3px' }}></div>
-        </Button>
-        <Menu
-            id="simple-menu"
-            anchorEl={anchorElement}
-            open={Boolean(anchorElement)}
-            onClose={this.handleClose}
-          >
-          <MenuItem onClick={this.handleClose}>
-            <Link to="/profile" style={{ textDecoration: 'none', color: 'black' }}>View Profile</Link>
-          </MenuItem>
-          <MenuItem onClick={this.handleClose}>
-            <Link to="/new" style={{ textDecoration: 'none', color: 'black' }}>New Acronym</Link>
-          </MenuItem>
-          <MenuItem onClick={this.logout}>
-            Logout
-          </MenuItem>
-        </Menu>
-      </div>
+      <React.Fragment>
+        <CssBaseline />
+        <div>
+          {userProfile && <img src={userProfile.picture} alt="Profile" style={{height: '50px', width: '50px', display: 'block', margin: '0 auto' }} />}
+          <Button
+              aria-owns={anchorElement ? 'simple-menu' : null}
+              aria-haspopup="true"
+              onClick={this.handleClick}
+              style={{ display: 'block', textAlign: 'center' }}
+            >
+              <div style={{ width: '35px', height: '5px', backgroundColor: 'white', margin: '6px auto', borderRadius: '3px' }}></div>
+              <div style={{ width: '35px', height: '5px', backgroundColor: 'white', margin: '6px auto', borderRadius: '3px' }}></div>
+              <div style={{ width: '35px', height: '5px', backgroundColor: 'white', margin: '6px auto', borderRadius: '3px' }}></div>
+          </Button>
+          <Menu
+              id="simple-menu"
+              anchorEl={anchorElement}
+              open={Boolean(anchorElement)}
+              onClose={this.handleClose}
+            >
+            <MenuItem onClick={this.handleClose}>
+              <Link to="/profile" style={{ textDecoration: 'none', color: 'black' }}>View Profile</Link>
+            </MenuItem>
+            <MenuItem onClick={this.handleClose}>
+              <Link to="/new" style={{ textDecoration: 'none', color: 'black' }}>New Acronym</Link>
+            </MenuItem>
+            <MenuItem onClick={this.logout}>
+              Logout
+            </MenuItem>
+          </Menu>
+        </div>
+      </React.Fragment>
     );
   };
 
