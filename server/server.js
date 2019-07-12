@@ -216,7 +216,7 @@ app.delete('/definitions/:id/likes', checkJwt, function (req, res) {
 // GET users likes
 app.get('/users/:id/likes', checkJwt, function (req, res) {
   acronymsModel.findAcronyms({
-    $or: [{ 'definitions.likes': req.params.id }]
+    'definitions.likes': req.params.id
   }, db, (err, result) => {
     if (err) {
       return res.status(500).send();
