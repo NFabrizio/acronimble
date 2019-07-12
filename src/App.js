@@ -49,7 +49,7 @@ class App extends React.Component {
   };
 
   getProfile() {
-    auth.getProfile((err) => {
+    return auth.getProfile((err) => {
       if (err) {
         return;
       }
@@ -171,7 +171,7 @@ class App extends React.Component {
               }
 
               return (
-                <Profile auth={auth} getProfile={this.getProfile} {...props} />
+                <Profile auth={auth} getProfile={this.getProfile} {...props} {...this.state} />
               );
             }}
           />

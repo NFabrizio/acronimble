@@ -59,11 +59,7 @@ class AcronymPage extends React.Component {
 
   like(itemId, definitionId) {
     const { auth } = this.props;
-    axios.put(`/definitions/${definitionId}/likes`, {}, {
-      headers: {
-        'Authorization': `Bearer ${auth.getAccessToken()}`
-      }
-    }).then(() => {
+    axios.put(`/definitions/${definitionId}/likes`, {}).then(() => {
       const acronym = this.state.acronym;
       const definition = acronym.definitions.find((definition) => {
         return definition.id === definitionId;
