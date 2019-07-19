@@ -80,6 +80,8 @@ export default class Auth {
 
   getProfile(cb) {
     let accessToken = this.getAccessToken();
+    axios.defaults.headers.common['Authorization'] = `Bearer ${accessToken}`;
+
     const auth0Promise = new Promise((resolve, reject) => {
       this.auth0.client.userInfo(accessToken, (err, profile) => {
         if (profile) {
@@ -91,13 +93,9 @@ export default class Auth {
     });
 
     const userId = encodeURIComponent(localStorage.getItem('user_id'));
-    const userLikesPromise = axios.get(`/users/${userId}/acronyms`, {
-      headers: {
-        'Authorization': `Bearer ${accessToken}`
-      }
-    });
+    const userLikesPromise = axios.get(`/users/${userId}/likes`);
 
-    Promise.all([auth0Promise, userLikesPromise]).then(([profile, likes]) => {
+    return Promise.all([auth0Promise, userLikesPromise]).then(([profile, likes]) => {
       this.userProfile = {
         ...profile,
         likes: likes.data || []

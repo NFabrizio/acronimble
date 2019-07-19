@@ -53,11 +53,7 @@ class Home extends Component {
   like(itemId, definitionId) {
     const { auth } = this.props;
 
-    axios.put(`/definitions/${definitionId}/likes`, {}, {
-      headers: {
-        'Authorization': `Bearer ${auth.getAccessToken()}`
-      }
-    }).then(() => {
+    axios.put(`/definitions/${definitionId}/likes`, {}).then(() => {
       const acronyms = this.state.acronyms;
       const userId = auth && auth.userProfile && auth.userProfile.sub;
 

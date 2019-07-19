@@ -214,10 +214,20 @@ app.delete('/definitions/:id/likes', checkJwt, function (req, res) {
 
 
 // GET users likes/submissions
-app.get('/users/:id/acronyms', checkJwt, function (req, res) {
+app.get('/users/:id/likes', checkJwt, function (req, res) {
   acronymsModel.findAcronyms({
     $or: [{ 'definitions.likes': req.params.id }, { owner: req.params.id }]
   }, db, (err, result) => {
+    if (err) {
+      return res.status(500).send();
+    }
+
+    res.send(result);
+  });
+});
+
+app.get('/users/:id/acronyms', checkJwt, function (req, res) {
+  acronymsModel.findAcronyms({ owner: req.params.id }, db, (err, result) => {
     if (err) {
       return res.status(500).send();
     }
