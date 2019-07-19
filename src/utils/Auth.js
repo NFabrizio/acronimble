@@ -48,10 +48,6 @@ export default class Auth {
     // navigate to the home route
 
     if (search) {
-      // const itemIdIndex = search.indexOf('&');
-      // const defIdIndex = itemIdIndex + 14;
-      // const params = `${search.slice(8, itemIdIndex)}/${search.slice(defIdIndex)}`;
-
       return history.replace(`/like${search}`);
     }
 
