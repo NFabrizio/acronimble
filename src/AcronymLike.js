@@ -19,7 +19,7 @@ const clickHandler = (like, definitionId, itemId, liked, isAuthenticated) => {
   }
 
   if (!isAuthenticated) {
-    return history.push(`/login/${itemId}/${definitionId}`);
+    return history.push(`/login?itemId=${itemId}&definitionId=${definitionId}`);
   }
 
   like(itemId, definitionId);

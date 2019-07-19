@@ -61,7 +61,7 @@ class App extends React.Component {
     });
   }
 
-  handleAuthentication(nextState, replace) {
+  handleAuthentication(nextState) {
     if (/access_token|id_token|error/.test(nextState.location.hash)) {
       auth.handleAuthentication(nextState.location.search, (err) => {
         if (err) {
@@ -153,7 +153,7 @@ class App extends React.Component {
           <Route path="/" exact
             render={(props) => <Home auth={auth} likesIds={this.state.likesIds} addToLikes={this.addToLikes} {...props} />}
           />
-          <Route path="/like/:itemId/:definitionId"
+          <Route path="/like"
             render={(props) => <Home auth={auth} likesIds={this.state.likesIds} addToLikes={this.addToLikes} {...props} />}
           />
           <Route
@@ -171,7 +171,7 @@ class App extends React.Component {
             this.handleAuthentication(props);
             return <Callback {...props} />
           }}/>
-          <Route path="/login/:itemId/:definitionId" render={(props) => <Login auth={auth} {...props} />} />
+          <Route path="/login" render={(props) => <Login auth={auth} {...props} />} />
           <Route path="/new" render={(props) => {
             if (!isAuthenticated()) {
               return <Redirect to="/login" />;

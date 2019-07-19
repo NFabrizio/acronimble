@@ -1,12 +1,13 @@
 import * as R from 'ramda';
 import axios from 'axios';
-import { MuiThemeProvider, createMuiTheme } from '@material-ui/core/styles';
 import React, { Component } from 'react';
+import { MuiThemeProvider, createMuiTheme } from '@material-ui/core/styles';
+import { TextField, InputAdornment, withStyles } from '@material-ui/core';
+import SearchIcon from '@material-ui/icons/Search';
+import queryString from 'query-string';
 import AcronymList from './AcronymList';
 import './App.css';
 import { lensBy_Id, lensById } from './utils/ramda';
-import { TextField, InputAdornment, withStyles } from '@material-ui/core';
-import SearchIcon from '@material-ui/icons/Search';
 import history from './utils/history';
 
 const theme = createMuiTheme({
@@ -42,7 +43,7 @@ class Home extends Component {
       this.setState({acronyms: res.data, loading: false});
     });
 
-    const { itemId, definitionId } = this.props.match.params;
+    const { itemId, definitionId } = queryString.parse(this.props.location.search);
 
     if (itemId && definitionId) {
       this.like(itemId, definitionId);
@@ -71,7 +72,7 @@ class Home extends Component {
 
       this.props.addToLikes(definitionId);
 
-      if (this.props.match.params.itemId) {
+      if (this.props.location.search) {
         return history.replace('/');
       }
 

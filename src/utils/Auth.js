@@ -5,7 +5,6 @@ import axios from 'axios';
 export default class Auth {
   constructor() {
     this.login = this.login.bind(this);
-    this.loginAndLike = this.loginAndLike.bind(this);
     this.logout = this.logout.bind(this);
     this.isAuthenticated = this.isAuthenticated.bind(this);
     this.handleAuthentication = this.handleAuthentication.bind(this);
@@ -16,17 +15,12 @@ export default class Auth {
   auth0 = new auth0.WebAuth({
     domain: 'nathankluth.auth0.com',
     clientID: 'KhCmaEsCN2HdW3NkKo1uF6mK8EpMGImd',
-    redirectUri: `${window.location.origin}/callback`,
     audience: 'acronimbleapi',
     responseType: 'token id_token',
     scope: 'openid profile'
   });
 
-  login() {
-    this.auth0.authorize();
-  }
-
-  loginAndLike(itemId, definitionId) {
+  login(itemId, definitionId) {
     const params = (itemId && definitionId) ? `?itemId=${itemId}&definitionId=${definitionId}` : '';
     this.auth0.authorize({
       redirectUri: `${window.location.origin}/callback${params}`,
@@ -54,11 +48,11 @@ export default class Auth {
     // navigate to the home route
 
     if (search) {
-      const itemIdIndex = search.indexOf('&');
-      const defIdIndex = itemIdIndex + 14;
-      const params = `${search.slice(8, itemIdIndex)}/${search.slice(defIdIndex)}`;
+      // const itemIdIndex = search.indexOf('&');
+      // const defIdIndex = itemIdIndex + 14;
+      // const params = `${search.slice(8, itemIdIndex)}/${search.slice(defIdIndex)}`;
 
-      return history.replace(`/like/${params}`);
+      return history.replace(`/like${search}`);
     }
 
     history.replace('/');
