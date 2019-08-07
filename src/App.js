@@ -91,7 +91,6 @@ class App extends React.Component {
     const userProfile = auth.userProfile;
     return (
       <React.Fragment>
-        <CssBaseline />
         <div>
           {userProfile && <img src={userProfile.picture} alt="Profile" style={{height: '50px', width: '50px', display: 'block', margin: '0 auto' }} />}
           <Button
@@ -144,6 +143,7 @@ class App extends React.Component {
     return (
       <Router history={history}>
         <div className="App">
+          <CssBaseline />
           <header className="App-header">
             <div className="app-info">
               <img src={pearsonLogo} className="App-logo" alt="logo" />
