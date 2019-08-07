@@ -1,13 +1,14 @@
 import * as R from 'ramda';
 import axios from 'axios';
-import { MuiThemeProvider, createMuiTheme } from '@material-ui/core/styles';
 import React, { Component } from 'react';
-import AcronymList from './AcronymList';
-import './App.css';
-import './App.css';
-import { lensBy_Id, lensById } from './utils/ramda';
+import { MuiThemeProvider, createMuiTheme } from '@material-ui/core/styles';
 import { TextField, InputAdornment, withStyles } from '@material-ui/core';
 import SearchIcon from '@material-ui/icons/Search';
+import queryString from 'query-string';
+import AcronymList from './AcronymList';
+import './App.css';
+import { lensBy_Id, lensById } from './utils/ramda';
+import history from './utils/history';
 
 const theme = createMuiTheme({
   typography: {
@@ -39,12 +40,19 @@ class Home extends Component {
 
   componentDidMount() {
     axios.get('/acronyms').then((res) => {
-      this.setState({acronyms: res.data, loading: false})
+      this.setState({acronyms: res.data, loading: false});
     });
+
+    const { itemId, definitionId } = queryString.parse(this.props.location.search);
+
+    if (itemId && definitionId) {
+      this.like(itemId, definitionId);
+    }
   }
 
   like(itemId, definitionId) {
     const { auth } = this.props;
+
     axios.put(`/definitions/${definitionId}/likes`, {}).then(() => {
       const acronyms = this.state.acronyms;
       const userId = auth && auth.userProfile && auth.userProfile.sub;
@@ -58,11 +66,15 @@ class Home extends Component {
       const likesView = R.view(likesLens, acronyms);
       const newAcronyms = R.set(likesLens, R.append(userId, likesView), acronyms);
 
-      this.setState({
-        newAcronyms
-      });
-
       this.props.addToLikes(definitionId);
+
+      if (this.props.location.search) {
+        return history.replace('/');
+      }
+
+      this.setState({
+        acronyms: newAcronyms
+      });
     });
   }
 

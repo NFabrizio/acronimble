@@ -4,6 +4,7 @@ import Badge from '@material-ui/core/Badge';
 import IconButton from '@material-ui/core/IconButton';
 import ThumbsUpIcon from '@material-ui/icons/ThumbUp';
 import { withStyles } from '@material-ui/styles';
+import history from './utils/history';
 
 const styles = {
   badge: {
@@ -12,9 +13,13 @@ const styles = {
   }
 };
 
-const clickHandler = (isAuthenticated, liked, like, itemId, definitionId) => {
-  if (!isAuthenticated || liked) {
+const clickHandler = (like, definitionId, itemId, liked, isAuthenticated) => {
+  if (liked) {
     return;
+  }
+
+  if (!isAuthenticated) {
+    return history.push(`/login?itemId=${itemId}&definitionId=${definitionId}`);
   }
 
   like(itemId, definitionId);
@@ -32,7 +37,7 @@ const AcronymLike = (props) => {
       >
         <IconButton
           tooltip="Like"
-          onClick={() => clickHandler(isAuthenticated, liked, like, itemId, definitionId)}
+          onClick={() => clickHandler(like, definitionId, itemId, liked, isAuthenticated)}
         >
           <ThumbsUpIcon style={{ fontSize: 28, color: props.liked ? 'blue' : 'black' }} />
         </IconButton>

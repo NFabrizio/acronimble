@@ -1,18 +1,14 @@
-import Button from '@material-ui/core/Button';
-import CssBaseline from '@material-ui/core/CssBaseline';
-import { Link } from 'react-router-dom';
-import Menu from '@material-ui/core/Menu';
-import MenuItem from '@material-ui/core/MenuItem';
 import React from 'react';
-import { Route, Router, Redirect } from 'react-router-dom';
+import { Route, Router, Redirect, Link } from 'react-router-dom';
+import { Button, Menu, MenuItem, CssBaseline } from '@material-ui/core';
 import Home from './Home';
 import Profile from './Profile';
 import Callback from './Callback';
-import Auth from './utils/Auth';
-import history from './utils/history';
 import Login from './Login';
 import AddAcronym from './AddAcronym';
 import AcronymPage from './AcronymPage';
+import Auth from './utils/Auth';
+import history from './utils/history';
 import pearsonLogo from './assets/pearson-logo.png';
 
 const auth = new Auth();
@@ -65,9 +61,9 @@ class App extends React.Component {
     });
   }
 
-  handleAuthentication(nextState, replace) {
+  handleAuthentication(nextState) {
     if (/access_token|id_token|error/.test(nextState.location.hash)) {
-      auth.handleAuthentication((err) => {
+      auth.handleAuthentication(nextState.location.search, (err) => {
         if (err) {
           return;
         }
@@ -124,10 +120,6 @@ class App extends React.Component {
     );
   };
 
-  login() {
-    auth.login();
-  }
-
   logout = () => {
     // Reset state on anchorElement so that dropdown will close on logout
     this.setState({
@@ -155,13 +147,16 @@ class App extends React.Component {
                   AcroNimble
                 </h1>
               </Link>
-              <span className="App-title" style={{fontSize: 14}}>its fun</span>
+              <span className="App-title" style={{fontSize: 14}}>it's fun</span>
             </div>
             <div className="profile-block">
-              {isAuthenticated() ? this.showExample() : <Button onClick={this.login} style={{ backgroundColor: 'white' }}>Login</Button>}
+              {isAuthenticated() ? this.showExample() : <Button onClick={auth.login} style={{ backgroundColor: 'white' }}>Login</Button>}
             </div>
           </header>
           <Route path="/" exact
+            render={(props) => <Home auth={auth} likesIds={this.state.likesIds} addToLikes={this.addToLikes} {...props} />}
+          />
+          <Route path="/like"
             render={(props) => <Home auth={auth} likesIds={this.state.likesIds} addToLikes={this.addToLikes} {...props} />}
           />
           <Route
