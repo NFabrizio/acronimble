@@ -1,4 +1,5 @@
 import React from 'react';
+import * as R from 'ramda';
 import PropTypes from 'prop-types';
 import Card from '@material-ui/core/Card';
 import CardContent from '@material-ui/core/CardContent';
@@ -7,6 +8,7 @@ import Chip from '@material-ui/core/Chip';
 import { withStyles } from '@material-ui/styles';
 import axios from 'axios';
 import AcronymLike from './AcronymLike';
+import { lensById } from './utils/ramda';
 
 const styles = {
   badge: {
@@ -71,21 +73,17 @@ class AcronymPage extends React.Component {
     const { auth } = this.props;
     request.then(() => {
       this.setState(prevState => {
-        const { likes = [] } = prevState.acronym.definitions[definitionIndex];
+        const likesLens = R.compose(
+          R.lensProp('definitions'),
+          lensById(definitionId),
+          R.lensProp('likes')
+        );
 
-        return {
-          acronym: {
-            ...prevState.acronym,
-            definitions: [
-              ...prevState.acronym.definitions.slice(0, definitionIndex),
-              {
-                ...prevState.acronym.definitions[definitionIndex],
-                likes: liked ? prevState.acronym.definitions[definitionIndex].likes.filter((id) => id !== auth.userProfile.sub) : [...likes, auth.userProfile.sub]
-              },
-              ...prevState.acronym.definitions.slice(definitionIndex + 1)
-            ]
-          }
-        };
+        const likesView = R.view(likesLens, prevState.acronym);
+        const action = liked ? R.filter((id) => id !== auth.userProfile.sub) : R.append(auth.userProfile.sub)
+        const newAcronym = R.set(likesLens, action(likesView), prevState.acronym);
+
+        return { acronym: newAcronym };
       });
 
       if (liked) {
