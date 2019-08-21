@@ -54,6 +54,7 @@ class Profile extends React.Component {
                   auth={this.props.auth}
                   likesIds={this.props.likesIds}
                   addToLikes={this.props.addToLikes}
+                  removeFromLikes={this.props.removeFromLikes}
                 />
               )}
               {this.state.value === 1 && <div>Coming Soon</div>}

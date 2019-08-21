@@ -28,6 +28,21 @@ class UserAcronyms extends React.Component {
     });
   }
 
+  like = (itemId, definitionId, liked) => {
+    if (!liked) {
+      // safety net, liked should always be true on profile page
+      return;
+    }
+
+    axios.delete(`/definitions/${definitionId}/likes`, {}).then(() => {
+      this.setState(prevState => ({
+        data: prevState.data.filter(({ acronym }) => acronym.id !== definitionId)
+      }));
+
+      this.props.removeFromLikes(definitionId);
+    });
+  }
+
   render() {
     if (this.state.loading) {
       return <LoadingSpinner />;
@@ -41,7 +56,7 @@ class UserAcronyms extends React.Component {
       <AcronymList
         list={this.state.data}
         isAuthenticated={this.props.auth.isAuthenticated()}
-        addToLikes={this.props.addToLikes}
+        like={this.like}
         likesIds={this.props.likesIds}
       />
     );

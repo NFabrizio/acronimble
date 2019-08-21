@@ -14,15 +14,11 @@ const styles = {
 };
 
 const clickHandler = (like, definitionId, itemId, liked, isAuthenticated) => {
-  if (liked) {
-    return;
-  }
-
   if (!isAuthenticated) {
     return history.push(`/login?itemId=${itemId}&definitionId=${definitionId}`);
   }
 
-  like(itemId, definitionId);
+  like(itemId, definitionId, liked);
 };
 
 const AcronymLike = (props) => {

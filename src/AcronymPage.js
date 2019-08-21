@@ -57,19 +57,41 @@ class AcronymPage extends React.Component {
     });
   }
 
-  like(itemId, definitionId) {
+  like(itemId, definitionId, liked) {
+    const definitionIndex = this.state.acronym.definitions.findIndex((definition) => {
+      return definition.id === definitionId;
+    });
+
+    if (definitionIndex < 0) {
+      return;
+    }
+
+    const request = liked ? axios.delete(`/definitions/${definitionId}/likes`) : axios.put(`/definitions/${definitionId}/likes`, {});
+
     const { auth } = this.props;
-    axios.put(`/definitions/${definitionId}/likes`, {}).then(() => {
-      const acronym = this.state.acronym;
-      const definition = acronym.definitions.find((definition) => {
-        return definition.id === definitionId;
+    request.then(() => {
+      this.setState(prevState => {
+        const { likes = [] } = prevState.acronym.definitions[definitionIndex];
+
+        return {
+          acronym: {
+            ...prevState.acronym,
+            definitions: [
+              ...prevState.acronym.definitions.slice(0, definitionIndex),
+              {
+                ...prevState.acronym.definitions[definitionIndex],
+                likes: liked ? prevState.acronym.definitions[definitionIndex].likes.filter((id) => id !== auth.userProfile.sub) : [...likes, auth.userProfile.sub]
+              },
+              ...prevState.acronym.definitions.slice(definitionIndex + 1)
+            ]
+          }
+        };
       });
 
-      (definition.likes = definition.likes || []).push(auth.userProfile.sub);
+      if (liked) {
+        return this.props.removeFromLikes(definitionId);
+      }
 
-      this.setState({
-        acronym
-      });
       this.props.addToLikes(definitionId);
     });
   }
