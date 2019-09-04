@@ -203,7 +203,7 @@ app.put('/definitions/:id/likes', checkJwt, function (req, res) {
 
 // DELETE like
 app.delete('/definitions/:id/likes', checkJwt, function (req, res) {
-  acronymsModel.unlikeDefinition(req.params.id, req.user.sub, db, (err) => {
+  acronymsModel.unlikeDefinition(ObjectId.createFromHexString(req.params.id), req.user.sub, db, (err) => {
     if (err) {
       return res.status(500).send(err);
     }
