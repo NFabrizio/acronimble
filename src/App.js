@@ -74,11 +74,15 @@ class App extends React.Component {
   }
 
   addToLikes(definitionId) {
-    const { likesIds = [] } = this.state;
-
-    this.setState({
+    this.setState(({ likesIds = [] }) => ({
       likesIds: [...likesIds, definitionId]
-    });
+    }));
+  }
+
+  removeFromLikes = (definitionId) => {
+    this.setState(({ likesIds = [] }) => ({
+      likesIds: likesIds.filter((id) => id !== definitionId)
+    }));
   }
 
   showExample() {
@@ -153,10 +157,10 @@ class App extends React.Component {
             </div>
           </header>
           <Route path="/" exact
-            render={(props) => <Home auth={auth} likesIds={this.state.likesIds} addToLikes={this.addToLikes} {...props} />}
+            render={(props) => <Home auth={auth} likesIds={this.state.likesIds} addToLikes={this.addToLikes} removeFromLikes={this.removeFromLikes} {...props} />}
           />
           <Route path="/like"
-            render={(props) => <Home auth={auth} likesIds={this.state.likesIds} addToLikes={this.addToLikes} {...props} />}
+            render={(props) => <Home auth={auth} likesIds={this.state.likesIds} addToLikes={this.addToLikes} removeFromLikes={this.removeFromLikes} {...props} />}
           />
           <Route
             path="/profile" render={(props) => {
@@ -165,7 +169,7 @@ class App extends React.Component {
               }
 
               return (
-                <Profile auth={auth} getProfile={this.getProfile} {...props} {...this.state} />
+                <Profile auth={auth} getProfile={this.getProfile} removeFromLikes={this.removeFromLikes} {...props} {...this.state} />
               );
             }}
           />
@@ -182,7 +186,7 @@ class App extends React.Component {
             return <AddAcronym auth={auth} {...props} />;
           }} />
           <Route path="/acronyms/:id" render={(props) => {
-            return <AcronymPage auth={auth} likesIds={this.state.likesIds} addToLikes={this.addToLikes} {...props} />;
+            return <AcronymPage auth={auth} likesIds={this.state.likesIds} addToLikes={this.addToLikes} removeFromLikes={this.removeFromLikes} {...props} />;
           }} />
         </div>
       </Router>

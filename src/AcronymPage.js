@@ -1,4 +1,5 @@
 import React from 'react';
+import * as R from 'ramda';
 import PropTypes from 'prop-types';
 import Card from '@material-ui/core/Card';
 import CardContent from '@material-ui/core/CardContent';
@@ -7,6 +8,7 @@ import Chip from '@material-ui/core/Chip';
 import { withStyles } from '@material-ui/styles';
 import axios from 'axios';
 import AcronymLike from './AcronymLike';
+import { lensById } from './utils/ramda';
 
 const styles = {
   badge: {
@@ -57,19 +59,37 @@ class AcronymPage extends React.Component {
     });
   }
 
-  like(itemId, definitionId) {
+  like(itemId, definitionId, liked) {
+    const definitionIndex = this.state.acronym.definitions.findIndex((definition) => {
+      return definition.id === definitionId;
+    });
+
+    if (definitionIndex < 0) {
+      return;
+    }
+
+    const request = liked ? axios.delete(`/definitions/${definitionId}/likes`) : axios.put(`/definitions/${definitionId}/likes`, {});
+
     const { auth } = this.props;
-    axios.put(`/definitions/${definitionId}/likes`, {}).then(() => {
-      const acronym = this.state.acronym;
-      const definition = acronym.definitions.find((definition) => {
-        return definition.id === definitionId;
+    request.then(() => {
+      this.setState(prevState => {
+        const likesLens = R.compose(
+          R.lensProp('definitions'),
+          lensById(definitionId),
+          R.lensProp('likes')
+        );
+
+        const likesView = R.view(likesLens, prevState.acronym);
+        const action = liked ? R.filter((id) => id !== auth.userProfile.sub) : R.append(auth.userProfile.sub)
+        const newAcronym = R.set(likesLens, action(likesView), prevState.acronym);
+
+        return { acronym: newAcronym };
       });
 
-      (definition.likes = definition.likes || []).push(auth.userProfile.sub);
+      if (liked) {
+        return this.props.removeFromLikes(definitionId);
+      }
 
-      this.setState({
-        acronym
-      });
       this.props.addToLikes(definitionId);
     });
   }

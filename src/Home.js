@@ -50,10 +50,12 @@ class Home extends Component {
     }
   }
 
-  like(itemId, definitionId) {
+  like(itemId, definitionId, liked) {
     const { auth } = this.props;
 
-    axios.put(`/definitions/${definitionId}/likes`, {}).then(() => {
+    const request = liked ? axios.delete(`/definitions/${definitionId}/likes`) : axios.put(`/definitions/${definitionId}/likes`, {});
+
+    request.then(() => {
       const acronyms = this.state.acronyms;
       const userId = auth && auth.userProfile && auth.userProfile.sub;
 
@@ -64,9 +66,8 @@ class Home extends Component {
         R.lensProp('likes')
       );
       const likesView = R.view(likesLens, acronyms);
-      const newAcronyms = R.set(likesLens, R.append(userId, likesView), acronyms);
-
-      this.props.addToLikes(definitionId);
+      const action = liked ? R.filter((id) => id !== userId) : R.append(userId)
+      const newAcronyms = R.set(likesLens, action(likesView), acronyms);
 
       if (this.props.location.search) {
         return history.replace('/');
@@ -75,6 +76,12 @@ class Home extends Component {
       this.setState({
         acronyms: newAcronyms
       });
+
+      if (liked) {
+        return this.props.removeFromLikes(definitionId);
+      }
+
+      this.props.addToLikes(definitionId);
     });
   }
 
