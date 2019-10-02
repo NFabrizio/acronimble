@@ -1,5 +1,4 @@
-import { createBrowserHistory } from 'history';
+import createHistory from 'history/createBrowserHistory';
+import createTestHistory from 'history/createMemoryHistory';
 
-const history = createBrowserHistory();
-
-export default history;
+export default process.env.BABEL_ENV === 'test' ? createTestHistory() : createHistory();
