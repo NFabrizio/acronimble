@@ -24,34 +24,25 @@ const styles = {
 };
 
 const acronymCategories = (list = []) => {
-  return list.map((item) => {
-    return (
-      <Chip label={item} style={{ marginLeft: 10 }} key={item} />
-    );
+  return list.map(item => {
+    return <Chip label={item} style={{ marginLeft: 10 }} key={item} />;
   });
 };
 
 const isLiked = (likesIds, definitionId) => {
-  return likesIds.some((likeId) => {
-    return likeId === definitionId
+  return likesIds.some(likeId => {
+    return likeId === definitionId;
   });
 };
 
-const AcronymList = (props) => {
-  const {
-    list = [],
-    like,
-    isAuthenticated,
-    likesIds
-  } = props;
+const AcronymList = props => {
+  const { list = [], like, isAuthenticated, likesIds } = props;
 
   if ((Array.isArray(list) && !list.length) || !list.map) {
-    return (
-      <NoResultsPage />
-    );
+    return <NoResultsPage />;
   }
 
-  return list.map((item) => {
+  return list.map(item => {
     return (
       <Card className="acronym-card" key={item.acronym}>
         <Link to={`/acronyms/${item._id}`} style={{ color: 'black', textDecoration: 'none' }}>
@@ -60,8 +51,7 @@ const AcronymList = (props) => {
             subheader={acronymCategories(item.category)}
             style={{ padding: 12, backgroundColor: '#bbb' }}
             classes={{ title: props.classes.title, subheader: props.classes.subheader }}
-          >
-          </CardHeader>
+          ></CardHeader>
           <div style={{ padding: '16px 24px' }}>
             <CardContent style={{ fontSize: 18, padding: '0 40px 10px 0' }}>
               {item.definitions[0].name}
@@ -74,7 +64,7 @@ const AcronymList = (props) => {
         <AcronymLike
           style={{ position: 'absolute', top: 70, right: 14 }}
           like={like}
-		      likes={item.definitions[0].likes || []}
+          likes={item.definitions[0].likes || []}
           definitionId={item.definitions[0].id}
           itemId={item._id}
           liked={isLiked(likesIds, item.definitions[0].id)}
