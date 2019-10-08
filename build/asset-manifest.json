@@ -1,8 +1,23 @@
 {
-  "main.css": "static/css/main.7fa09e9d.css",
-  "main.css.map": "static/css/main.7fa09e9d.css.map",
-  "main.js": "static/js/main.e40d94be.js",
-  "main.js.map": "static/js/main.e40d94be.js.map",
-  "static/media/logo.svg": "static/media/logo.5d5d9eef.svg",
-  "static/media/pearson-logo.png": "static/media/pearson-logo.78779899.png"
+  "files": {
+    "main.css": "/static/css/main.a99d09c7.chunk.css",
+    "main.js": "/static/js/main.15aa5a6e.chunk.js",
+    "main.js.map": "/static/js/main.15aa5a6e.chunk.js.map",
+    "runtime-main.js": "/static/js/runtime-main.93edca69.js",
+    "runtime-main.js.map": "/static/js/runtime-main.93edca69.js.map",
+    "static/js/2.c7cc3308.chunk.js": "/static/js/2.c7cc3308.chunk.js",
+    "static/js/2.c7cc3308.chunk.js.map": "/static/js/2.c7cc3308.chunk.js.map",
+    "index.html": "/index.html",
+    "precache-manifest.d382410425ac43d487994217eafebf86.js": "/precache-manifest.d382410425ac43d487994217eafebf86.js",
+    "service-worker.js": "/service-worker.js",
+    "static/css/main.a99d09c7.chunk.css.map": "/static/css/main.a99d09c7.chunk.css.map",
+    "static/media/logo.svg": "/static/media/logo.5d5d9eef.svg",
+    "static/media/pearson-logo.png": "/static/media/pearson-logo.78779899.png"
+  },
+  "entrypoints": [
+    "static/js/runtime-main.93edca69.js",
+    "static/js/2.c7cc3308.chunk.js",
+    "static/css/main.a99d09c7.chunk.css",
+    "static/js/main.15aa5a6e.chunk.js"
+  ]
 }
