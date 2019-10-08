@@ -7,7 +7,7 @@ import UserAcronyms from './UserAcronyms';
 import LoadingSpinner from './common/LoadingSpinner';
 
 class Profile extends React.Component {
-  state = { value: 0, loading: true }
+  state = { value: 0, loading: true };
 
   componentDidMount() {
     if (!this.props.auth.userProfile || !this.props.auth.userProfile.sub) {
@@ -23,22 +23,24 @@ class Profile extends React.Component {
     const { userProfile } = this.props.auth;
 
     if (this.state.loading) {
-      return <LoadingSpinner />
+      return <LoadingSpinner />;
     }
 
     return (
       <div>
         <Paper style={{ width: '80%', margin: '15px auto', padding: '20px' }} elevation={3}>
           <div className="text-fields">
-            Profile Picture: { userProfile &&
-              <img src={userProfile.picture} alt="Profile" style={{height: '50px', width: '50px', display: 'block', margin: '5px 15px' }} /> }
+            Profile Picture:
+            {userProfile && (
+              <img
+                src={userProfile.picture}
+                alt="Profile"
+                style={{ height: '50px', width: '50px', display: 'block', margin: '5px 15px' }}
+              />
+            )}
           </div>
-          <div className="text-fields">
-            Name: { userProfile && userProfile.name }
-          </div>
-          <div className="text-fields">
-            Nickname: { userProfile && userProfile.nickname }
-          </div>
+          <div className="text-fields">Name: {userProfile && userProfile.name}</div>
+          <div className="text-fields">Nickname: {userProfile && userProfile.nickname}</div>
         </Paper>
         <div style={{ width: '80%', margin: '15px auto' }}>
           <AppBar position="static">

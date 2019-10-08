@@ -1,11 +1,13 @@
-import React from 'react'
-import { render, fireEvent } from '@testing-library/react'
+import React from 'react';
+import { render, fireEvent } from '@testing-library/react';
 import AcronymLike from '../AcronymLike';
 import history from '../utils/history';
 
 test('likes an acronym if user is logged in', () => {
   const like = jest.fn();
-  const { getByText, debug, getByTestId } = render(<AcronymLike isAuthenticated like={like} likes={[]} />);
+  const { getByText, debug, getByTestId } = render(
+    <AcronymLike isAuthenticated like={like} likes={[]} />
+  );
   const button = getByText(/click/i);
 
   fireEvent.click(button);

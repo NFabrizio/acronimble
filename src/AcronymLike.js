@@ -21,16 +21,12 @@ const clickHandler = (like, definitionId, itemId, liked, isAuthenticated) => {
   like(itemId, definitionId, liked);
 };
 
-const AcronymLike = (props) => {
+const AcronymLike = props => {
   const { like, likes = [], definitionId, itemId, liked, isAuthenticated } = props;
 
   return (
     <CardActions style={props.style}>
-      <Badge
-        badgeContent={likes.length}
-        color="secondary"
-        classes={{ badge: props.classes.badge }}
-      >
+      <Badge badgeContent={likes.length} color="secondary" classes={{ badge: props.classes.badge }}>
         <IconButton
           tooltip="Like"
           onClick={() => clickHandler(like, definitionId, itemId, liked, isAuthenticated)}
