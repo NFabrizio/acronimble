@@ -9,7 +9,7 @@ class UserAcronyms extends React.Component {
     loading: true,
     error: false,
     data: []
-  }
+  };
 
   componentDidMount() {
     this.fetchUserAcronyms();
@@ -18,15 +18,18 @@ class UserAcronyms extends React.Component {
   fetchUserAcronyms = () => {
     this.setState({ loading: true, error: false });
 
-    axios.get(`users/${this.props.auth.userProfile.sub}/acronyms`).then((res) => {
-      this.setState({
-        data: res.data,
-        loading: false
+    axios
+      .get(`users/${this.props.auth.userProfile.sub}/acronyms`)
+      .then(res => {
+        this.setState({
+          data: res.data,
+          loading: false
+        });
       })
-    }).catch(() => {
-      this.setState({ error: true, loading: false })
-    });
-  }
+      .catch(() => {
+        this.setState({ error: true, loading: false });
+      });
+  };
 
   like = (itemId, definitionId, liked) => {
     if (!liked) {
@@ -41,7 +44,7 @@ class UserAcronyms extends React.Component {
 
       this.props.removeFromLikes(definitionId);
     });
-  }
+  };
 
   render() {
     if (this.state.loading) {

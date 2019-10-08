@@ -12,13 +12,13 @@ import history from './utils/history';
 
 const theme = createMuiTheme({
   typography: {
-    useNextVariants: true,
+    useNextVariants: true
   }
 });
 
 const styles = theme => ({
   margin: {
-    margin: theme.spacing.unit,
+    margin: theme.spacing.unit
   }
 });
 
@@ -39,8 +39,8 @@ class Home extends Component {
   }
 
   componentDidMount() {
-    axios.get('/acronyms').then((res) => {
-      this.setState({acronyms: res.data, loading: false});
+    axios.get('/acronyms').then(res => {
+      this.setState({ acronyms: res.data, loading: false });
     });
 
     const { itemId, definitionId } = queryString.parse(this.props.location.search);
@@ -53,7 +53,9 @@ class Home extends Component {
   like(itemId, definitionId, liked) {
     const { auth } = this.props;
 
-    const request = liked ? axios.delete(`/definitions/${definitionId}/likes`) : axios.put(`/definitions/${definitionId}/likes`, {});
+    const request = liked
+      ? axios.delete(`/definitions/${definitionId}/likes`)
+      : axios.put(`/definitions/${definitionId}/likes`, {});
 
     request.then(() => {
       const acronyms = this.state.acronyms;
@@ -66,7 +68,7 @@ class Home extends Component {
         R.lensProp('likes')
       );
       const likesView = R.view(likesLens, acronyms);
-      const action = liked ? R.filter((id) => id !== userId) : R.append(userId)
+      const action = liked ? R.filter(id => id !== userId) : R.append(userId);
       const newAcronyms = R.set(likesLens, action(likesView), acronyms);
 
       if (this.props.location.search) {
@@ -94,10 +96,12 @@ class Home extends Component {
 
     const definitionMatch = R.compose(
       R.any(R.contains(this.state.search)), // any item in array contains search substring
-      R.chain(R.compose(
-        R.map(R.toLower),
-        R.props(['description', 'name'])
-      )),
+      R.chain(
+        R.compose(
+          R.map(R.toLower),
+          R.props(['description', 'name'])
+        )
+      ),
       R.prop('definitions')
     );
 
@@ -120,17 +124,22 @@ class Home extends Component {
               label="Search acronyms"
               value={this.state.search}
               className={this.props.classes.margin}
-              onChange={(event) => this.setState({ search: event.target.value })}
+              onChange={event => this.setState({ search: event.target.value })}
               InputProps={{
                 endAdornment: (
                   <InputAdornment position="end">
                     <SearchIcon />
                   </InputAdornment>
-                ),
+                )
               }}
             />
           </div>
-          <AcronymList list={acronymsList} like={this.like} isAuthenticated={auth.isAuthenticated()} likesIds={likesIds} />
+          <AcronymList
+            list={acronymsList}
+            like={this.like}
+            isAuthenticated={auth.isAuthenticated()}
+            likesIds={likesIds}
+          />
         </div>
       </MuiThemeProvider>
     );

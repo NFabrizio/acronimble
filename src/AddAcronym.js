@@ -28,26 +28,25 @@ class AddAcronym extends React.Component {
   }
 
   componentDidMount() {
-    axios.get('/categories')
-      .then((res) => {
-        this.setState({
-          loading: false,
-          categories: res.data || []
-        });
+    axios.get('/categories').then(res => {
+      this.setState({
+        loading: false,
+        categories: res.data || []
       });
+    });
   }
 
   handleChange(name) {
-    return (event) => {
+    return event => {
       this.setState({
-        [name]: event.target.value,
+        [name]: event.target.value
       });
     };
-  };
+  }
 
   handleSelect(event) {
     this.setState({ selected: event.target.value });
-  };
+  }
 
   handleSubmit(e) {
     e.preventDefault && e.preventDefault();
@@ -60,22 +59,26 @@ class AddAcronym extends React.Component {
       submitting: true
     });
 
-    axios.post('/acronyms', {
-      acronym: this.state.acronym,
-      definitions: [{
-        name: this.state.name,
-        description: this.state.definition,
-        categories: this.state.selected
-      }]
-    }).then((res) => {
-      this.props.history.push('/');
-    });
+    axios
+      .post('/acronyms', {
+        acronym: this.state.acronym,
+        definitions: [
+          {
+            name: this.state.name,
+            description: this.state.definition,
+            categories: this.state.selected
+          }
+        ]
+      })
+      .then(() => {
+        this.props.history.push('/');
+      });
   }
 
   render() {
     if (this.state.loading) {
       return 'Loading...';
-    };
+    }
 
     return (
       <form className="new-acronym-form" autoComplete="off">
@@ -110,7 +113,7 @@ class AddAcronym extends React.Component {
             input={<Input id="select-multiple-checkbox" />}
             renderValue={selected => selected.join(', ')}
           >
-            {this.state.categories.map((category) => (
+            {this.state.categories.map(category => (
               <MenuItem key={category._id} value={category._id}>
                 <Checkbox checked={this.state.selected.indexOf(category._id) > -1} />
                 <ListItemText primary={category.categoryName} />
@@ -119,11 +122,7 @@ class AddAcronym extends React.Component {
           </Select>
         </FormControl>
         <div className="form-actions">
-          <Button
-            variant="raised"
-            color="secondary"
-            onClick={() => this.props.history.push('/')}
-          >
+          <Button variant="raised" color="secondary" onClick={() => this.props.history.push('/')}>
             Cancel
           </Button>
           <Button
