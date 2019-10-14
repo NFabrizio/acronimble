@@ -20,7 +20,7 @@ class App extends React.Component {
     this.state = {
       anchorElement: null,
       likesIds: []
-    }
+    };
 
     this.handleAuthentication = this.handleAuthentication.bind(this);
     this.getProfile = this.getProfile.bind(this);
@@ -33,7 +33,7 @@ class App extends React.Component {
       return;
     }
 
-   this.getProfile();
+    this.getProfile();
   }
 
   handleClick = event => {
@@ -45,13 +45,13 @@ class App extends React.Component {
   };
 
   getProfile() {
-    return auth.getProfile((err) => {
+    return auth.getProfile(err => {
       if (err) {
         return;
       }
 
       const { likes = [] } = auth.userProfile;
-      const likesIds = likes.map((item) => {
+      const likesIds = likes.map(item => {
         return item.definitions[0].id;
       });
 
@@ -63,7 +63,7 @@ class App extends React.Component {
 
   handleAuthentication(nextState) {
     if (/access_token|id_token|error/.test(nextState.location.hash)) {
-      auth.handleAuthentication(nextState.location.search, (err) => {
+      auth.handleAuthentication(nextState.location.search, err => {
         if (err) {
           return;
         }
@@ -79,11 +79,11 @@ class App extends React.Component {
     }));
   }
 
-  removeFromLikes = (definitionId) => {
+  removeFromLikes = definitionId => {
     this.setState(({ likesIds = [] }) => ({
-      likesIds: likesIds.filter((id) => id !== definitionId)
+      likesIds: likesIds.filter(id => id !== definitionId)
     }));
-  }
+  };
 
   showExample() {
     const { anchorElement } = this.state;
@@ -91,37 +91,69 @@ class App extends React.Component {
     return (
       <React.Fragment>
         <div>
-          {userProfile && <img src={userProfile.picture} alt="Profile" style={{height: '50px', width: '50px', display: 'block', margin: '0 auto' }} />}
+          {userProfile && (
+            <img
+              src={userProfile.picture}
+              alt="Profile"
+              style={{ height: '50px', width: '50px', display: 'block', margin: '0 auto' }}
+            />
+          )}
           <Button
-              aria-owns={anchorElement ? 'simple-menu' : null}
-              aria-haspopup="true"
-              onClick={this.handleClick}
-              style={{ display: 'block', textAlign: 'center' }}
-            >
-              <div style={{ width: '35px', height: '5px', backgroundColor: 'white', margin: '6px auto', borderRadius: '3px' }}></div>
-              <div style={{ width: '35px', height: '5px', backgroundColor: 'white', margin: '6px auto', borderRadius: '3px' }}></div>
-              <div style={{ width: '35px', height: '5px', backgroundColor: 'white', margin: '6px auto', borderRadius: '3px' }}></div>
+            aria-owns={anchorElement ? 'simple-menu' : null}
+            aria-haspopup="true"
+            onClick={this.handleClick}
+            style={{ display: 'block', textAlign: 'center' }}
+          >
+            <div
+              style={{
+                width: '35px',
+                height: '5px',
+                backgroundColor: 'white',
+                margin: '6px auto',
+                borderRadius: '3px'
+              }}
+            ></div>
+            <div
+              style={{
+                width: '35px',
+                height: '5px',
+                backgroundColor: 'white',
+                margin: '6px auto',
+                borderRadius: '3px'
+              }}
+            ></div>
+            <div
+              style={{
+                width: '35px',
+                height: '5px',
+                backgroundColor: 'white',
+                margin: '6px auto',
+                borderRadius: '3px'
+              }}
+            ></div>
           </Button>
           <Menu
-              id="simple-menu"
-              anchorEl={anchorElement}
-              open={Boolean(anchorElement)}
-              onClose={this.handleClose}
-            >
+            id="simple-menu"
+            anchorEl={anchorElement}
+            open={Boolean(anchorElement)}
+            onClose={this.handleClose}
+          >
             <MenuItem onClick={this.handleClose}>
-              <Link to="/profile" style={{ textDecoration: 'none', color: 'black' }}>View Profile</Link>
+              <Link to="/profile" style={{ textDecoration: 'none', color: 'black' }}>
+                View Profile
+              </Link>
             </MenuItem>
             <MenuItem onClick={this.handleClose}>
-              <Link to="/new" style={{ textDecoration: 'none', color: 'black' }}>New Acronym</Link>
+              <Link to="/new" style={{ textDecoration: 'none', color: 'black' }}>
+                New Acronym
+              </Link>
             </MenuItem>
-            <MenuItem onClick={this.logout}>
-              Logout
-            </MenuItem>
+            <MenuItem onClick={this.logout}>Logout</MenuItem>
           </Menu>
         </div>
       </React.Fragment>
     );
-  };
+  }
 
   logout = () => {
     // Reset state on anchorElement so that dropdown will close on logout
@@ -130,7 +162,7 @@ class App extends React.Component {
       likesIds: []
     });
     auth.logout();
-  }
+  };
 
   render() {
     const { isAuthenticated } = auth;
@@ -143,51 +175,99 @@ class App extends React.Component {
             <div className="app-info">
               <img src={pearsonLogo} className="App-logo" alt="logo" />
               <Link to="/" style={{ textDecoration: 'none', color: 'white' }}>
-                <h1
-                  className="App-title"
-                  style={{marginBottom: 0, cursor: 'pointer'}}
-                >
+                <h1 className="App-title" style={{ marginBottom: 0, cursor: 'pointer' }}>
                   AcroNimble
                 </h1>
               </Link>
-              <span className="App-title" style={{fontSize: 14}}>it's fun</span>
+              <span className="App-title" style={{ fontSize: 14 }}>
+                it&apos;s fun
+              </span>
             </div>
             <div className="profile-block">
-              {isAuthenticated() ? this.showExample() : <Button onClick={auth.login} style={{ backgroundColor: 'white' }}>Login</Button>}
+              {isAuthenticated() ? (
+                this.showExample()
+              ) : (
+                <Button onClick={auth.login} style={{ backgroundColor: 'white' }}>
+                  Login
+                </Button>
+              )}
             </div>
           </header>
-          <Route path="/" exact
-            render={(props) => <Home auth={auth} likesIds={this.state.likesIds} addToLikes={this.addToLikes} removeFromLikes={this.removeFromLikes} {...props} />}
-          />
-          <Route path="/like"
-            render={(props) => <Home auth={auth} likesIds={this.state.likesIds} addToLikes={this.addToLikes} removeFromLikes={this.removeFromLikes} {...props} />}
+          <Route
+            path="/"
+            exact
+            render={props => (
+              <Home
+                auth={auth}
+                likesIds={this.state.likesIds}
+                addToLikes={this.addToLikes}
+                removeFromLikes={this.removeFromLikes}
+                {...props}
+              />
+            )}
           />
           <Route
-            path="/profile" render={(props) => {
+            path="/like"
+            render={props => (
+              <Home
+                auth={auth}
+                likesIds={this.state.likesIds}
+                addToLikes={this.addToLikes}
+                removeFromLikes={this.removeFromLikes}
+                {...props}
+              />
+            )}
+          />
+          <Route
+            path="/profile"
+            render={props => {
               if (!isAuthenticated()) {
                 return <Redirect to="/login" />;
               }
 
               return (
-                <Profile auth={auth} getProfile={this.getProfile} removeFromLikes={this.removeFromLikes} {...props} {...this.state} />
+                <Profile
+                  auth={auth}
+                  getProfile={this.getProfile}
+                  removeFromLikes={this.removeFromLikes}
+                  {...props}
+                  {...this.state}
+                />
               );
             }}
           />
-          <Route path="/callback" render={(props) => {
-            this.handleAuthentication(props);
-            return <Callback {...props} />
-          }}/>
-          <Route path="/login" render={(props) => <Login auth={auth} {...props} />} />
-          <Route path="/new" render={(props) => {
-            if (!isAuthenticated()) {
-              return <Redirect to="/login" />;
-            }
+          <Route
+            path="/callback"
+            render={props => {
+              this.handleAuthentication(props);
+              return <Callback {...props} />;
+            }}
+          />
+          <Route path="/login" render={props => <Login auth={auth} {...props} />} />
+          <Route
+            path="/new"
+            render={props => {
+              if (!isAuthenticated()) {
+                return <Redirect to="/login" />;
+              }
 
-            return <AddAcronym auth={auth} {...props} />;
-          }} />
-          <Route path="/acronyms/:id" render={(props) => {
-            return <AcronymPage auth={auth} likesIds={this.state.likesIds} addToLikes={this.addToLikes} removeFromLikes={this.removeFromLikes} {...props} />;
-          }} />
+              return <AddAcronym auth={auth} {...props} />;
+            }}
+          />
+          <Route
+            path="/acronyms/:id"
+            render={props => {
+              return (
+                <AcronymPage
+                  auth={auth}
+                  likesIds={this.state.likesIds}
+                  addToLikes={this.addToLikes}
+                  removeFromLikes={this.removeFromLikes}
+                  {...props}
+                />
+              );
+            }}
+          />
         </div>
       </Router>
     );

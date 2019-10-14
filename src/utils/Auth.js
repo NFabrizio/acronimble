@@ -21,9 +21,9 @@ export default class Auth {
   });
 
   login(itemId, definitionId) {
-    const params = (itemId && definitionId) ? `?itemId=${itemId}&definitionId=${definitionId}` : '';
+    const params = itemId && definitionId ? `?itemId=${itemId}&definitionId=${definitionId}` : '';
     this.auth0.authorize({
-      redirectUri: `${window.location.origin}/callback${params}`,
+      redirectUri: `${window.location.origin}/callback${params}`
     });
   }
 
@@ -40,7 +40,7 @@ export default class Auth {
 
   setSession(search, authResult) {
     // Set the time that the Access Token will expire at
-    let expiresAt = JSON.stringify((authResult.expiresIn * 1000) + new Date().getTime());
+    let expiresAt = JSON.stringify(authResult.expiresIn * 1000 + new Date().getTime());
     localStorage.setItem('access_token', authResult.accessToken);
     localStorage.setItem('id_token', authResult.idToken);
     localStorage.setItem('expires_at', expiresAt);
@@ -91,13 +91,15 @@ export default class Auth {
     const userId = encodeURIComponent(localStorage.getItem('user_id'));
     const userLikesPromise = axios.get(`/users/${userId}/likes`);
 
-    return Promise.all([auth0Promise, userLikesPromise]).then(([profile, likes]) => {
-      this.userProfile = {
-        ...profile,
-        likes: likes.data || []
-      };
+    return Promise.all([auth0Promise, userLikesPromise])
+      .then(([profile, likes]) => {
+        this.userProfile = {
+          ...profile,
+          likes: likes.data || []
+        };
 
-      cb();
-    }).catch(cb);
+        cb();
+      })
+      .catch(cb);
   }
 }

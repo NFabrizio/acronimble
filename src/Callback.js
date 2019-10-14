@@ -5,7 +5,7 @@ class Callback extends Component {
   render() {
     return (
       <div>
-        <img src={loading} alt="loading"/>
+        <img src={loading} alt="loading" />
       </div>
     );
   }

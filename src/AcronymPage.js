@@ -25,10 +25,8 @@ const styles = {
 };
 
 const acronymCategories = (list = []) => {
-  return list.map((item) => {
-    return (
-      <Chip label={item} style={{marginLeft: 10, float: 'right'}} />
-    );
+  return list.map(item => {
+    return <Chip label={item} key={item} style={{ marginLeft: 10, float: 'right' }} />;
   });
 };
 
@@ -45,22 +43,22 @@ class AcronymPage extends React.Component {
   }
 
   componentDidMount() {
-    axios.get(`/acronyms/${this.props.match.params.id}`).then((res) => {
+    axios.get(`/acronyms/${this.props.match.params.id}`).then(res => {
       this.setState({
         acronym: res.data,
         loading: false
-      })
+      });
     });
   }
 
   isLiked(likesIds, definitionId) {
-    return likesIds.some((likeId) => {
-      return likeId === definitionId
+    return likesIds.some(likeId => {
+      return likeId === definitionId;
     });
   }
 
   like(itemId, definitionId, liked) {
-    const definitionIndex = this.state.acronym.definitions.findIndex((definition) => {
+    const definitionIndex = this.state.acronym.definitions.findIndex(definition => {
       return definition.id === definitionId;
     });
 
@@ -68,7 +66,9 @@ class AcronymPage extends React.Component {
       return;
     }
 
-    const request = liked ? axios.delete(`/definitions/${definitionId}/likes`) : axios.put(`/definitions/${definitionId}/likes`, {});
+    const request = liked
+      ? axios.delete(`/definitions/${definitionId}/likes`)
+      : axios.put(`/definitions/${definitionId}/likes`, {});
 
     const { auth } = this.props;
     request.then(() => {
@@ -80,7 +80,9 @@ class AcronymPage extends React.Component {
         );
 
         const likesView = R.view(likesLens, prevState.acronym);
-        const action = liked ? R.filter((id) => id !== auth.userProfile.sub) : R.append(auth.userProfile.sub)
+        const action = liked
+          ? R.filter(id => id !== auth.userProfile.sub)
+          : R.append(auth.userProfile.sub);
         const newAcronym = R.set(likesLens, action(likesView), prevState.acronym);
 
         return { acronym: newAcronym };
@@ -98,32 +100,31 @@ class AcronymPage extends React.Component {
     const item = this.state.acronym;
     const { auth, likesIds } = this.props;
     if (this.state.loading) {
-      return 'loading...'
+      return 'loading...';
     }
 
     return (
       <Card className="acronym-card">
         <CardHeader
           title={item.acronym}
-          subheader={<div style={{fontSize: 16, paddingTop: 6}}>Top Definition!</div>}
-          style={{padding: 10, paddingLeft: 16, paddingRight: 16, backgroundColor: '#b0c4de'}}
-          classes={{title: this.props.classes.title, subheader: this.props.classes.subheader}}
-        >
-        </CardHeader>
-        <div style={{display: 'grid', gridTemplateColumns: '6fr 2fr'}}>
-          <CardContent style={{fontSize: 18, paddingBottom: 10, gridArea: '1/1/auto/auto'}}>
+          subheader={<div style={{ fontSize: 16, paddingTop: 6 }}>Top Definition!</div>}
+          style={{ padding: 10, paddingLeft: 16, paddingRight: 16, backgroundColor: '#b0c4de' }}
+          classes={{ title: this.props.classes.title, subheader: this.props.classes.subheader }}
+        ></CardHeader>
+        <div style={{ display: 'grid', gridTemplateColumns: '6fr 2fr' }}>
+          <CardContent style={{ fontSize: 18, paddingBottom: 10, gridArea: '1/1/auto/auto' }}>
             {item.definitions && item.definitions[0].name}
           </CardContent>
-          <div style={{gridArea: '1/2/auto/auto', paddingTop: 16, paddingRight: 24}}>
+          <div style={{ gridArea: '1/2/auto/auto', paddingTop: 16, paddingRight: 24 }}>
             {acronymCategories(item.category)}
           </div>
         </div>
-        <CardContent style={{fontSize: 14, paddingTop: 0, paddingBottom: 24}}>
+        <CardContent style={{ fontSize: 14, paddingTop: 0, paddingBottom: 24 }}>
           {item.definitions && item.definitions[0].description}
         </CardContent>
-        <div style={{display: 'grid', gridTemplateColumns: '1fr 3fr'}}>
+        <div style={{ display: 'grid', gridTemplateColumns: '1fr 3fr' }}>
           <AcronymLike
-            style={{gridArea: '1/1/auto/auto'}}
+            style={{ gridArea: '1/1/auto/auto' }}
             like={this.like}
             likes={item.definitions[0].likes || []}
             definitionId={item.definitions[0].id}
@@ -131,7 +132,14 @@ class AcronymPage extends React.Component {
             liked={this.isLiked(likesIds, item.definitions[0].id)}
             isAuthenticated={auth.isAuthenticated()}
           />
-          <CardContent style={{fontSize: 14, padding: '30px 24px 16px', gridArea: '1/2/auto/auto', textAlign: 'right'}}>
+          <CardContent
+            style={{
+              fontSize: 14,
+              padding: '30px 24px 16px',
+              gridArea: '1/2/auto/auto',
+              textAlign: 'right'
+            }}
+          >
             Submitted by {auth && auth.userProfile && auth.userProfile.nickname}
           </CardContent>
         </div>
