@@ -22,7 +22,7 @@ const clickHandler = (like, definitionId, itemId, liked, isAuthenticated) => {
 };
 
 const AcronymLike = props => {
-  const { like, likes, definitionId, itemId, liked, isAuthenticated } = props;
+  const { like, likes = [], definitionId, itemId, liked, isAuthenticated } = props;
 
   return (
     <CardActions style={props.style}>
@@ -31,6 +31,9 @@ const AcronymLike = props => {
           tooltip="Like"
           onClick={() => clickHandler(like, definitionId, itemId, liked, isAuthenticated)}
         >
+          <span className="sr-only">
+            {props.liked ? 'Click to unlike this definition' : 'Click to like this definition'}
+          </span>
           <ThumbsUpIcon style={{ fontSize: 28, color: props.liked ? 'blue' : 'black' }} />
         </IconButton>
       </Badge>
