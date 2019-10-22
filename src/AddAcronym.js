@@ -36,6 +36,11 @@ class AddAcronym extends React.Component {
     });
   }
 
+  getCategoryName(selectedArray) {
+    return this.state.categories.filter(category => selectedArray.includes(category._id))
+    .map(category => category.categoryName);
+  }
+
   handleChange(name) {
     return event => {
       this.setState({
@@ -111,7 +116,7 @@ class AddAcronym extends React.Component {
             value={this.state.selected}
             onChange={this.handleSelect}
             input={<Input id="select-multiple-checkbox" />}
-            renderValue={selected => selected.join(', ')}
+            renderValue={selected => this.getCategoryName(selected).join(', ')}
           >
             {this.state.categories.map(category => (
               <MenuItem key={category._id} value={category._id}>
@@ -122,11 +127,11 @@ class AddAcronym extends React.Component {
           </Select>
         </FormControl>
         <div className="form-actions">
-          <Button variant="raised" color="secondary" onClick={() => this.props.history.push('/')}>
+          <Button variant="contained" color="secondary" onClick={() => this.props.history.push('/')}>
             Cancel
           </Button>
           <Button
-            variant="raised"
+            variant="contained"
             color="primary"
             disabled={this.state.submitting}
             onClick={this.handleSubmit}
