@@ -10,6 +10,7 @@ import FormControl from '@material-ui/core/FormControl';
 import Select from '@material-ui/core/Select';
 import Checkbox from '@material-ui/core/Checkbox';
 import ListItemText from '@material-ui/core/ListItemText';
+import { getCategoryName } from './utils/utils';
 
 class AddAcronym extends React.Component {
   constructor(props) {
@@ -34,11 +35,6 @@ class AddAcronym extends React.Component {
         categories: res.data || []
       });
     });
-  }
-
-  getCategoryName(selectedArray) {
-    return this.state.categories.filter(category => selectedArray.includes(category._id))
-    .map(category => category.categoryName);
   }
 
   handleChange(name) {
@@ -116,7 +112,7 @@ class AddAcronym extends React.Component {
             value={this.state.selected}
             onChange={this.handleSelect}
             input={<Input id="select-multiple-checkbox" />}
-            renderValue={selected => this.getCategoryName(selected).join(', ')}
+            renderValue={selected => getCategoryName(this.state.categories, selected).join(', ')}
           >
             {this.state.categories.map(category => (
               <MenuItem key={category._id} value={category._id}>
