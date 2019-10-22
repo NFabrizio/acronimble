@@ -8,6 +8,7 @@ import Chip from '@material-ui/core/Chip';
 import { withStyles } from '@material-ui/styles';
 import axios from 'axios';
 import AcronymLike from './AcronymLike';
+import { getCategoryName } from './utils/utils';
 import { lensById } from './utils/ramda';
 
 const styles = {
@@ -36,6 +37,7 @@ class AcronymPage extends React.Component {
 
     this.state = {
       acronym: {},
+      categories: [],
       loading: true
     };
 
@@ -47,6 +49,11 @@ class AcronymPage extends React.Component {
       this.setState({
         acronym: res.data,
         loading: false
+      });
+    });
+    axios.get('/categories').then(res => {
+      this.setState({
+        categories: res.data || []
       });
     });
   }
@@ -116,7 +123,9 @@ class AcronymPage extends React.Component {
             {item.definitions && item.definitions[0].name}
           </CardContent>
           <div style={{ gridArea: '1/2/auto/auto', paddingTop: 16, paddingRight: 24 }}>
-            {acronymCategories(item.category)}
+            {acronymCategories(item.definitions && Array.isArray(item.definitions)
+              && item.definitions.length && item.definitions[0].categories
+              && getCategoryName(this.state.categories, item.definitions[0].categories))}
           </div>
         </div>
         <CardContent style={{ fontSize: 14, paddingTop: 0, paddingBottom: 24 }}>
