@@ -123,7 +123,12 @@ class AddAcronym extends React.Component {
           </Select>
         </FormControl>
         <div className="form-actions">
-          <Button variant="contained" color="secondary" onClick={() => this.props.history.push('/')}>
+          <Button
+            variant="contained"
+            color="secondary"
+            onClick={() => this.props.history.push('/')}
+            data-testid="cancel-button"
+          >
             Cancel
           </Button>
           <Button
@@ -131,6 +136,7 @@ class AddAcronym extends React.Component {
             color="primary"
             disabled={this.state.submitting}
             onClick={this.handleSubmit}
+            data-testid="submit-button"
           >
             Submit
           </Button>
