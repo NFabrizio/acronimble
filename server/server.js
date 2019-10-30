@@ -7,12 +7,14 @@ const acronymsModel = require('./models/acronyms');
 const categoriesModel = require('./models/categories');
 const jwt = require('express-jwt');
 const jwksRsa = require('jwks-rsa');
+const Sentry = require('@sentry/node');
 
 const app = express();
 const port = process.env.PORT || 8080;
 const url = 'mongodb://localhost:27017';
 let db;
 const dbName = 'acronimble';
+Sentry.init({ dsn: 'https://7a6c8e8216504f07a565c7bd483f233b@sentry.io/1768395' });
 
 const checkJwt = jwt({
   secret: jwksRsa.expressJwtSecret({
