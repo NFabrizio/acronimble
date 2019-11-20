@@ -80,15 +80,21 @@ app.get('/acronyms/:id', function (req, res) {
 // POST a new acronym
 app.post('/acronyms', checkJwt, function (req, res) {
   acronymsModel.acronymExists({ acronym: req.body.acronym }, db)
-  .then((exists) => {
-    if (exists) {
-      return res.status(409).send('Duplicate acronym');
-    }
-
+  .then((existsResult) => {
     // Give the definition a unique ID
     req.body.definitions[0].id = ObjectId.createFromTime(new Date().getTime());
     req.body.definitions[0].owner = req.user.sub;
     req.body.owner = req.user.sub;
+
+    if (existsResult) {
+      return acronymsModel.updateAcronym({_id: existsResult._id}, {$push: {definitions: req.body.definitions[0]}}, db, (err, result) => {
+        if (err) {
+          return res.status(500).send(err);
+        }
+
+        return res.send(result);
+      });
+    }
 
     acronymsModel.insertAcronym(req.body, db)
     .then((result) => {

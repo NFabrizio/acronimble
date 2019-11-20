@@ -25,7 +25,11 @@ module.exports.acronymExists = (query, db) => {
 
   return collection.findOne(query)
   .then((result) => {
-    return result && Object.keys(result).length > 0 && result.constructor === Object;
+    if(result && Object.keys(result).length > 0 && result.constructor === Object) {
+      return result;
+    };
+
+    return null;
   });
 };
 

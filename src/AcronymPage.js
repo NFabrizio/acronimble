@@ -103,6 +103,47 @@ class AcronymPage extends React.Component {
     });
   }
 
+  renderDefs(auth, likesIds, item) {
+    return item && item.definitions && item.definitions.map && item.definitions.map((definition, index) => (
+      <div key={`defintion.name-${index}`} style={{ borderBottom: 'solid 1px #000' }}>
+        <div style={{ display: 'grid', gridTemplateColumns: '6fr 2fr' }}>
+          <CardContent style={{ fontSize: 18, paddingBottom: 10, gridArea: '1/1/auto/auto' }}>
+            {definition.name}
+          </CardContent>
+          <div style={{ gridArea: '1/2/auto/auto', paddingTop: 16, paddingRight: 24 }}>
+            {acronymCategories(definition.categories
+              && getCategoryName(this.state.categories, definition.categories))}
+          </div>
+        </div>
+        <CardContent style={{ fontSize: 14, paddingTop: 0, paddingBottom: 24 }}>
+          {definition.description}
+        </CardContent>
+        <div style={{ display: 'grid', gridTemplateColumns: '1fr 3fr' }}>
+          <AcronymLike
+            style={{ gridArea: '1/1/auto/auto' }}
+            like={this.like}
+            likes={definition.likes || []}
+            definitionId={definition.id}
+            itemId={item._id}
+            liked={this.isLiked(likesIds, definition.id)}
+            isAuthenticated={auth.isAuthenticated()}
+          />
+          <CardContent
+            style={{
+              fontSize: 14,
+              padding: '30px 24px 16px',
+              gridArea: '1/2/auto/auto',
+              textAlign: 'right'
+            }}
+          >
+            Submitted by {auth && auth.userProfile && auth.userProfile.nickname}
+          </CardContent>
+        </div>
+      </div>
+      )
+    );
+  }
+
   render() {
     const item = this.state.acronym;
     const { auth, likesIds } = this.props;
@@ -118,40 +159,7 @@ class AcronymPage extends React.Component {
           style={{ padding: 10, paddingLeft: 16, paddingRight: 16, backgroundColor: '#b0c4de' }}
           classes={{ title: this.props.classes.title, subheader: this.props.classes.subheader }}
         ></CardHeader>
-        <div style={{ display: 'grid', gridTemplateColumns: '6fr 2fr' }}>
-          <CardContent style={{ fontSize: 18, paddingBottom: 10, gridArea: '1/1/auto/auto' }}>
-            {item.definitions && item.definitions[0].name}
-          </CardContent>
-          <div style={{ gridArea: '1/2/auto/auto', paddingTop: 16, paddingRight: 24 }}>
-            {acronymCategories(item.definitions && Array.isArray(item.definitions)
-              && item.definitions.length && item.definitions[0].categories
-              && getCategoryName(this.state.categories, item.definitions[0].categories))}
-          </div>
-        </div>
-        <CardContent style={{ fontSize: 14, paddingTop: 0, paddingBottom: 24 }}>
-          {item.definitions && item.definitions[0].description}
-        </CardContent>
-        <div style={{ display: 'grid', gridTemplateColumns: '1fr 3fr' }}>
-          <AcronymLike
-            style={{ gridArea: '1/1/auto/auto' }}
-            like={this.like}
-            likes={item.definitions[0].likes || []}
-            definitionId={item.definitions[0].id}
-            itemId={item._id}
-            liked={this.isLiked(likesIds, item.definitions[0].id)}
-            isAuthenticated={auth.isAuthenticated()}
-          />
-          <CardContent
-            style={{
-              fontSize: 14,
-              padding: '30px 24px 16px',
-              gridArea: '1/2/auto/auto',
-              textAlign: 'right'
-            }}
-          >
-            Submitted by {auth && auth.userProfile && auth.userProfile.nickname}
-          </CardContent>
-        </div>
+        {this.renderDefs(auth, likesIds, item)}
       </Card>
     );
   }
