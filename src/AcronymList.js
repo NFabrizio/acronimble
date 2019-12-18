@@ -35,22 +35,6 @@ const isLiked = (likesIds, definitionId) => {
   });
 };
 
-const mostPopularDefinition = (definitions = []) => {
-  const mostPopular = definitions.reduce((previous, current) =>
-    previous.likes.length > current.likes.length ? previous : current
-  );
-  return (
-    <div style={{ padding: '16px 24px' }}>
-      <CardContent style={{ fontSize: 18, padding: '0 40px 10px 0' }}>
-        {mostPopular.name}
-      </CardContent>
-      <CardContent style={{ fontSize: 14, padding: '0 40px 0 0' }}>
-        {mostPopular.description}
-      </CardContent>
-    </div>
-  );
-};
-
 const AcronymList = props => {
   const { list = [], like, isAuthenticated, likesIds } = props;
 
